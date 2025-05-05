@@ -3,5 +3,4 @@
 	url = https://github.com/foundry-rs/forge-std
 [submodule "lib/hourglass-monorepo"]
 	path = lib/hourglass-monorepo
-	branch = rajath/imports
 	url = https://github.com/Layr-Labs/hourglass-monorepo
