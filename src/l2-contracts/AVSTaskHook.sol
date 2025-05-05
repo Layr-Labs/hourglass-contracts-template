@@ -3,8 +3,8 @@ pragma solidity ^0.8.27;
 
 import {OperatorSet} from "@eigenlayer-contracts/src/contracts/libraries/OperatorSetLib.sol";
 
-import {IAVSTaskHook} from "@hourglass-monorepo/src/interfaces/IAVSTaskHook.sol";
-import {IBN254CertificateVerifier} from "@hourglass-monorepo/src/interfaces/IBN254CertificateVerifier.sol";
+import {IAVSTaskHook} from "@hourglass-monorepo/src/interfaces/avs/l2/IAVSTaskHook.sol";
+import {IBN254CertificateVerifier} from "@hourglass-monorepo/src/interfaces/avs/l2/IBN254CertificateVerifier.sol";
 
 contract AVSTaskHook is IAVSTaskHook {
     function validatePreTaskCreation(
