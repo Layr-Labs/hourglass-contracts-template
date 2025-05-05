@@ -5,7 +5,7 @@ import {Script, console} from "forge-std/Script.sol";
 
 import {IAllocationManager} from "@eigenlayer-contracts/src/contracts/interfaces/IAllocationManager.sol";
 
-import {MockTaskAVSRegistrar} from "../test/mocks/MockTaskAVSRegistrar.sol";
+import {TaskAVSRegistrar} from "../src/l1-contracts/TaskAVSRegistrar.sol";
 
 contract DeployAVSL1Contracts is Script {
     // Eigenlayer Core Contracts
@@ -24,7 +24,7 @@ contract DeployAVSL1Contracts is Script {
         vm.startBroadcast(deployerPrivateKey);
         console.log("Deployer address:", deployer);
 
-        MockTaskAVSRegistrar taskAVSRegistrar = new MockTaskAVSRegistrar(avs, ALLOCATION_MANAGER);
+        TaskAVSRegistrar taskAVSRegistrar = new TaskAVSRegistrar(avs, ALLOCATION_MANAGER);
         console.log("TaskAVSRegistrar deployed to:", address(taskAVSRegistrar));
 
         vm.stopBroadcast();
