@@ -1,4 +1,8 @@
-.PHONY: deploy-task-mailbox deploy-avs-l1-contracts setup-avs-l1 deploy-avs-l2-contracts setup-avs-task-mailbox-config create-task
+.PHONY: build deploy-task-mailbox deploy-avs-l1-contracts setup-avs-l1 deploy-avs-l2-contracts setup-avs-task-mailbox-config create-task
+
+# Build the project
+build:
+	forge build
 
 # Deploy Task Mailbox
 deploy-task-mailbox:
@@ -27,6 +31,7 @@ create-task:
 # Helper message
 help:
 	@echo "Available commands:"
+	@echo "  make build - Build the project"
 	@echo "  make deploy-task-mailbox    - Deploy Task Mailbox"
 	@echo "  make deploy-avs-l1-contracts AVS_ADDRESS=0x... - Deploy AVS L1 Contracts"
 	@echo "  make setup-avs-l1 TASK_AVS_REGISTRAR_ADDRESS=0x... - Setup AVS on L1"
