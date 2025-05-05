@@ -10,6 +10,7 @@ gas_reports = ["*"]
 remappings = [
     "forge-std/=lib/forge-std/src/",
     "@hourglass-monorepo/=lib/hourglass-monorepo/contracts/",
+    "@eigenlayer-middleware/=lib/hourglass-monorepo/contracts/lib/eigenlayer-middleware/",
 ]
 
 # Specifies the exact version of Solidity to use, overriding auto-detection.
