@@ -11,6 +11,8 @@ remappings = [
     "forge-std/=lib/forge-std/src/",
     "@hourglass-monorepo/=lib/hourglass-monorepo/contracts/",
     "@eigenlayer-middleware/=lib/hourglass-monorepo/contracts/lib/eigenlayer-middleware/",
+    "@eigenlayer-contracts/=lib/hourglass-monorepo/contracts/lib/eigenlayer-middleware/lib/eigenlayer-contracts/",
+    "@openzeppelin/=lib/hourglass-monorepo/contracts/lib/eigenlayer-middleware/lib/openzeppelin-contracts/"
 ]
 
 # Specifies the exact version of Solidity to use, overriding auto-detection.

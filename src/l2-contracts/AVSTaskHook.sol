@@ -1,7 +1,7 @@
 // SPDX-License-Identifier: BUSL-1.1
 pragma solidity ^0.8.27;
 
-import {OperatorSet} from "@eigenlayer-middleware/lib/eigenlayer-contracts/src/contracts/libraries/OperatorSetLib.sol";
+import {OperatorSet} from "@eigenlayer-contracts/src/contracts/libraries/OperatorSetLib.sol";
 
 import {IAVSTaskHook} from "@hourglass-monorepo/src/interfaces/IAVSTaskHook.sol";
 import {IBN254CertificateVerifier} from "@hourglass-monorepo/src/interfaces/IBN254CertificateVerifier.sol";
