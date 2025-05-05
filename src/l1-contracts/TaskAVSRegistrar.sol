@@ -7,4 +7,6 @@ import {TaskAVSRegistrarBase} from "@hourglass-monorepo/src/avs/l1-contracts/Tas
 
 contract TaskAVSRegistrar is TaskAVSRegistrarBase {
     constructor(address avs, IAllocationManager allocationManager) TaskAVSRegistrarBase(avs, allocationManager) {}
+
+    // TODO: Implement
 }
