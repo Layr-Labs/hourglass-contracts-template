@@ -35,7 +35,7 @@ contract CreateTask is Script {
         console.logBytes32(taskHash);
         ITaskMailboxTypes.Task memory task = ITaskMailbox(taskMailbox).getTaskInfo(taskHash);
         console.log("Task status:", uint8(task.status));
-        console.log("Task payload:", string(task.payload));
+        console.log("Task payload:", abi.decode(task.payload, (PayloadParams)).value);
 
         vm.stopBroadcast();
     }
