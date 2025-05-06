@@ -8,9 +8,13 @@ import {OperatorSet} from "@eigenlayer-contracts/src/contracts/libraries/Operato
 import {ITaskMailbox, ITaskMailboxTypes} from "@hourglass-monorepo/src/interfaces/core/ITaskMailbox.sol";
 
 contract CreateTask is Script {
+    struct PayloadParams {
+        uint256 value;
+    }
+
     function setUp() public {}
 
-    function run(address taskMailbox, address avs) public {
+    function run(address taskMailbox, address avs, uint256 value) public {
         // Load the private key from the environment variable
         uint256 appPrivateKey = vm.envUint("PRIVATE_KEY_APP");
         address app = vm.addr(appPrivateKey);
@@ -24,7 +28,7 @@ contract CreateTask is Script {
             refundCollector: address(0),
             avsFee: 0,
             executorOperatorSet: executorOperatorSet,
-            payload: bytes("Hello World")
+            payload: abi.encode(PayloadParams({value: value}))
         });
         bytes32 taskHash = ITaskMailbox(taskMailbox).createTask(taskParams);
         console.log("Created task with hash:");
