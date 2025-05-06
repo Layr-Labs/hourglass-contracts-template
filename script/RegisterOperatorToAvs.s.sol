@@ -17,11 +17,14 @@ contract RegisterOperatorToAvs is Script {
     IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
     AllocationManager allocationManager;
 
+    BN254.G1Point  pubkeyG1;
+    BN254.G2Point  pubkeyG2;
     function setUp() public {
         allocationManager = AllocationManager(contractsRegistry.nameToAddress("allocationManager"));
     }
 
     function run(
+        uint32 operatorSetId,
         uint256 operatorPvtKey,
         uint256 g1_x,
         uint256 g1_y,
@@ -38,17 +41,17 @@ contract RegisterOperatorToAvs is Script {
         uint256 avsPrivateKey = vm.envUint("AVS_PRIVATE_KEY");
         address avs = vm.addr(avsPrivateKey);
         uint32[] memory operatorSetIds = new uint32[](1);
-        operatorSetIds[0] = 0;
+        operatorSetIds[0] = operatorSetId;
 
         // Construct the G1 signature point
         BN254.G1Point memory signature =
             BN254.G1Point({X: pubkeyRegistrationMessageHash_X, Y: pubkeyRegistrationMessageHash_Y});
 
         // Construct the BLS pubkey (G1)
-        BN254.G1Point memory pubkeyG1 = BN254.G1Point({X: g1_x, Y: g1_y});
+        pubkeyG1 = BN254.G1Point({X: g1_x, Y: g1_y});
 
         // Construct the BLS pubkey (G2)
-        BN254.G2Point memory pubkeyG2 = BN254.G2Point({X: [g2_x_1, g2_x_0], Y: [g2_y_1, g2_y_0]});
+        pubkeyG2 = BN254.G2Point({X: [g2_x_1, g2_x_0], Y: [g2_y_1, g2_y_0]});
 
         // Bundle into pubkey registration params
         ITaskAVSRegistrarTypes.PubkeyRegistrationParams memory pubkeyParams = ITaskAVSRegistrarTypes
