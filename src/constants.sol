@@ -1,5 +1,5 @@
 pragma solidity ^0.8.27;
 
 library Constants {
-    address public constant CONTRACTS_REGISTRY = 0x5FbDB2315678afecb367f032d93F642f64180aa3;
+    address public constant CONTRACTS_REGISTRY = 0x787c6666213624D788522d516847978D7F348902;
 }
