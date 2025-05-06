@@ -11,21 +11,20 @@ import "@eigenlayer-contracts/src/contracts/core/DelegationManager.sol";
 import "forge-std/Test.sol";
 
 contract DepositIntoStrategies is Script, Test {
-    IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
+    // IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
     StrategyManager strategyManager;
     DelegationManager delegationManager;
 
     function setUp() public {
-        strategyManager = StrategyManager(contractsRegistry.nameToAddress("strategyManager"));
-        delegationManager = DelegationManager(contractsRegistry.nameToAddress("delegationManager"));
+        strategyManager = StrategyManager(0x858646372CC42E1A627fcE94aa7A7033e7CF075A);
+        delegationManager = DelegationManager(0x39053D51B77DC0d36036Fc1fCc8Cb819df8Ef37A);
     }
 
     function run(address strategy, uint256 operatorPvtKey) public {
-        uint whitelisterKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
-        vm.startBroadcast(whitelisterKey);
         IStrategy[] memory istrategies = new IStrategy[](1);
         istrategies[0] = IStrategy(strategy);
-        strategyManager.addStrategiesToDepositWhitelist(istrategies);
+
+        vm.startBroadcast();
 
         vm.stopBroadcast();
         // // Start broadcasting transactions
@@ -33,11 +32,12 @@ contract DepositIntoStrategies is Script, Test {
         IStrategy istrategy = IStrategy(strategy);
         address operator = vm.addr(operatorPvtKey);
         address token = address(istrategy.underlyingToken());
-        StdCheats.deal(address(token), address(operator), 10000 ether);
+        vm.assume()
+        // StdCheats.deal(address(token), address(operator), 10000 ether);
 
-        uint256 balance = IERC20(token).balanceOf(operator);
-        require(IERC20(token).approve(address(strategyManager), type(uint256).max),"failed to approve");
-        strategyManager.depositIntoStrategy(IStrategy(strategy), IERC20(token), IERC20(token).balanceOf(operator));  
+        // uint256 balance = IERC20(token).balanceOf(operator);
+        // require(IERC20(token).approve(address(strategyManager), type(uint256).max),"failed to approve");
+        // strategyManager.depositIntoStrategy(IStrategy(strategy), IERC20(token), IERC20(token).balanceOf(operator));  
 
         vm.stopBroadcast();
     }

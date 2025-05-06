@@ -11,10 +11,9 @@ import {AllocationManager} from
     import {IStrategy} from "@eigenlayer-contracts/src/contracts/interfaces/IStrategy.sol";
 import {OperatorSet} from "@eigenlayer-middleware/lib/eigenlayer-contracts/src/contracts/libraries/OperatorSetLib.sol";
 contract ModifyAllocations is Script {
-    IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
     AllocationManager allocationManager;
     function setUp() public {
-        allocationManager = AllocationManager(contractsRegistry.nameToAddress("allocationManager"));
+        allocationManager = AllocationManager(0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39);
     }
 
     function run(uint operatorPvtKey,address strategy ,uint64 allocation ,address avs,uint32 operatorSetId) public {
@@ -24,7 +23,6 @@ contract ModifyAllocations is Script {
         vm.startBroadcast(operatorPvtKey);
 
         allocationManager.setAllocationDelay(operator,0);
-        vm.warp(10000);
         IAllocationManagerTypes.AllocateParams[] memory allocations = new IAllocationManagerTypes.AllocateParams[](1);
         OperatorSet memory opSet = OperatorSet({avs: avs,id:operatorSetId});
         IStrategy[] memory istrategy = new IStrategy[](1);

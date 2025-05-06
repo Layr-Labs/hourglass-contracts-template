@@ -21,7 +21,7 @@ contract SetupAVSL1Contracts is Script {
     // Eigenlayer Strategies
 
     function setUp() public {
-        allocationManager = IAllocationManager(contractsRegistry.nameToAddress("allocationManager"));
+        allocationManager = IAllocationManager(0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39);
     }
 
     function run() public {
@@ -36,7 +36,7 @@ contract SetupAVSL1Contracts is Script {
         allocationManager.updateAVSMetadataURI(avs, "Test AVS");
         // 2. Set the AVS Registrar
         allocationManager.setAVSRegistrar(avs, IAVSRegistrar(taskAVSRegistrar));
-        console.log("AVS Registrar set:", address(allocationManager.getAVSRegistrar(avs)));
+        // console.log("AVS Registrar set:", address(allocationManager.getAVSRegistrar(avs)));
 
         vm.stopBroadcast();
     }

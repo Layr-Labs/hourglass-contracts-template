@@ -8,11 +8,11 @@ import {DelegationManager} from
     "@eigenlayer-middleware/lib/eigenlayer-contracts/src/contracts/core/DelegationManager.sol";
 
 contract RegisterOperatorToEigenLayer is Script {
-    IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
+    // IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
     DelegationManager delegationManager;
 
     function setUp() public {
-        delegationManager = DelegationManager(contractsRegistry.nameToAddress("delegationManager"));
+        delegationManager = DelegationManager(0x39053D51B77DC0d36036Fc1fCc8Cb819df8Ef37A);
     }
 
     function run(uint256 operatorPvtKey) public {

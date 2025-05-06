@@ -14,14 +14,13 @@ import {
 import {BN254} from "@eigenlayer-middleware/src/libraries/BN254.sol";
 
 contract RegisterOperatorToAvs is Script {
-    IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
     AllocationManager allocationManager;
 
     BN254.G1Point pubkeyG1;
     BN254.G2Point pubkeyG2;
 
     function setUp() public {
-        allocationManager = AllocationManager(contractsRegistry.nameToAddress("allocationManager"));
+        allocationManager = AllocationManager(0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39);
     }
 
     function run(

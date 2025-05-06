@@ -15,7 +15,7 @@ contract DeployTaskAVSRegistrar is Script {
     IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
 
     function setUp() public {
-        allocationManager = IAllocationManager(contractsRegistry.nameToAddress("allocationManager"));
+        allocationManager = IAllocationManager(0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39);
     }
 
     function run() public {
@@ -31,7 +31,7 @@ contract DeployTaskAVSRegistrar is Script {
 
         TaskAVSRegistrar taskAVSRegistrar = new TaskAVSRegistrar(avs, allocationManager);
         console.log("TaskAVSRegistrar deployed to:", address(taskAVSRegistrar));
-        contractsRegistry.registerContract("TaskAVSRegistrar", address(taskAVSRegistrar));
+        contractsRegistry.registerContract("TaskAVSRegistrar",address(taskAVSRegistrar));
         vm.stopBroadcast();
     }
 }

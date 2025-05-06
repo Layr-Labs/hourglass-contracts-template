@@ -14,12 +14,12 @@ import {IStrategy} from "@eigenlayer-contracts/src/contracts/interfaces/IStrateg
 
 contract CreateOperatorSet is Script {
     IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
-    IStrategy public STRATEGY_WETH = IStrategy(0x67d269191c92Caf3cD7723F116c85e6E9bf55933);
+    IStrategy public STRATEGY_ST_ETH = IStrategy(0x93c4b944D05dfe6df7645A86cd2206016c51564D);
 
     IAllocationManager public allocationManager;
 
     function setUp() public {
-        allocationManager = IAllocationManager(contractsRegistry.nameToAddress("allocationManager"));
+        allocationManager = IAllocationManager(0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39);
     }
 
     function run(uint32 operatorSetId) public {
@@ -31,7 +31,7 @@ contract CreateOperatorSet is Script {
         vm.startBroadcast(avsPrivateKey);
 
         IStrategy[] memory strategies = new IStrategy[](1);
-        strategies[0] = STRATEGY_WETH;
+        strategies[0] = STRATEGY_ST_ETH;
         IAllocationManagerTypes.CreateSetParams[] memory createOperatorSetParams =
             new IAllocationManagerTypes.CreateSetParams[](1);
         createOperatorSetParams[0] =
