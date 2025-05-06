@@ -21,24 +21,6 @@ contract DepositIntoStrategies is Script, Test {
     }
 
     function run(address strategy, uint256 operatorPvtKey) public {
-        IStrategy[] memory istrategies = new IStrategy[](1);
-        istrategies[0] = IStrategy(strategy);
-
-        vm.startBroadcast();
-
-        vm.stopBroadcast();
-        // // Start broadcasting transactions
-        vm.startBroadcast(operatorPvtKey);
-        IStrategy istrategy = IStrategy(strategy);
-        address operator = vm.addr(operatorPvtKey);
-        address token = address(istrategy.underlyingToken());
-        vm.assume()
-        // StdCheats.deal(address(token), address(operator), 10000 ether);
-
-        // uint256 balance = IERC20(token).balanceOf(operator);
-        // require(IERC20(token).approve(address(strategyManager), type(uint256).max),"failed to approve");
-        // strategyManager.depositIntoStrategy(IStrategy(strategy), IERC20(token), IERC20(token).balanceOf(operator));  
-
-        vm.stopBroadcast();
+     
     }
 }
