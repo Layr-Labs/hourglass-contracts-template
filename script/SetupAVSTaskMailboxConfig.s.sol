@@ -3,30 +3,39 @@ pragma solidity ^0.8.27;
 
 import {Script, console} from "forge-std/Script.sol";
 
-import {OperatorSet, OperatorSetLib} from "@eigenlayer-contracts/src/contracts/libraries/OperatorSetLib.sol";
-import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
+import {
+    OperatorSet,
+    OperatorSetLib
+} from "@eigenlayer-middleware/lib/eigenlayer-contracts/src/contracts/libraries/OperatorSetLib.sol";
+import {IERC20} from "@eigenlayer-middleware/lib/openzeppelin-contracts/contracts/token/ERC20/IERC20.sol";
 
 import {ITaskMailbox, ITaskMailboxTypes} from "@hourglass-monorepo/src/interfaces/core/ITaskMailbox.sol";
 import {IAVSTaskHook} from "@hourglass-monorepo/src/interfaces/avs/l2/IAVSTaskHook.sol";
 import {IBN254CertificateVerifier} from "@hourglass-monorepo/src/interfaces/avs/l2/IBN254CertificateVerifier.sol";
+import {IContractsRegistry} from "src/interfaces/IContractsRegistry.sol";
+import {Constants} from "src/constants.sol";
 
 contract SetupAVSTaskMailboxConfig is Script {
+    IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
+
     function setUp() public {}
 
-    function run(address taskMailbox, address certificateVerifier, address taskHook) public {
+    function run() public {
         // Load the private key from the environment variable
-        uint256 avsPrivateKey = vm.envUint("PRIVATE_KEY_AVS");
+        uint256 avsPrivateKey = vm.envUint("AVS_PRIVATE_KEY");
         address avs = vm.addr(avsPrivateKey);
-
+        address taskMailbox = contractsRegistry.nameToAddress("TaskMailbox");
+        address certificateVerifier = contractsRegistry.nameToAddress("BN254CertificateVerifier");
+        address taskHook = contractsRegistry.nameToAddress("AVSTaskHook");
         vm.startBroadcast(avsPrivateKey);
         console.log("AVS address:", avs);
 
         // 1. Set the AVS config
         uint32[] memory executorOperatorSetIds = new uint32[](1);
-        executorOperatorSetIds[0] = 1;
+        executorOperatorSetIds[0] = 0;
         ITaskMailboxTypes.AvsConfig memory avsConfig = ITaskMailboxTypes.AvsConfig({
             resultSubmitter: avs,
-            aggregatorOperatorSetId: 0,
+            aggregatorOperatorSetId: 1,
             executorOperatorSetIds: executorOperatorSetIds
         });
         ITaskMailbox(taskMailbox).setAvsConfig(avs, avsConfig);
@@ -49,9 +58,9 @@ contract SetupAVSTaskMailboxConfig is Script {
             stakeProportionThreshold: 10_000,
             taskMetadata: bytes("")
         });
-        ITaskMailbox(taskMailbox).setExecutorOperatorSetTaskConfig(OperatorSet(avs, 1), executorOperatorSetTaskConfig);
+        ITaskMailbox(taskMailbox).setExecutorOperatorSetTaskConfig(OperatorSet(avs, 0), executorOperatorSetTaskConfig);
         ITaskMailboxTypes.ExecutorOperatorSetTaskConfig memory executorOperatorSetTaskConfigStored =
-            ITaskMailbox(taskMailbox).getExecutorOperatorSetTaskConfig(OperatorSet(avs, 1));
+            ITaskMailbox(taskMailbox).getExecutorOperatorSetTaskConfig(OperatorSet(avs, 0));
         console.log(
             "Executor Operator Set Task Config set:",
             executorOperatorSetTaskConfigStored.certificateVerifier,

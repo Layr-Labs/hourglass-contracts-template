@@ -2,24 +2,29 @@
 pragma solidity ^0.8.27;
 
 import {Script, console} from "forge-std/Script.sol";
-
 import {TaskMailbox} from "@hourglass-monorepo/src/core/TaskMailbox.sol";
+import {IContractsRegistry} from "src/interfaces/IContractsRegistry.sol";
+import {Constants} from "src/constants.sol";
 
 contract DeployTaskMailbox is Script {
+    IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
+
     function setUp() public {}
 
     function run() public {
-        // Load the private key from the environment variable
+        // Get the private key from the environment variable
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
-        address deployer = vm.addr(deployerPrivateKey);
+
+        // Start broadcasting transactions
+        vm.startBroadcast(deployerPrivateKey);
 
         // Deploy the TaskMailbox contract
-        vm.startBroadcast(deployerPrivateKey);
-        console.log("Deployer address:", deployer);
-
         TaskMailbox taskMailbox = new TaskMailbox();
-        console.log("TaskMailbox deployed to:", address(taskMailbox));
 
+        // Log the contract address
+        console.log("TaskMailbox deployed to:", address(taskMailbox));
+        contractsRegistry.registerContract("TaskMailbox", address(taskMailbox));
+        // Stop broadcasting transactions
         vm.stopBroadcast();
     }
 }

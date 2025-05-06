@@ -6,17 +6,22 @@ import {Script, console} from "forge-std/Script.sol";
 import {IAllocationManager} from "@eigenlayer-contracts/src/contracts/interfaces/IAllocationManager.sol";
 
 import {TaskAVSRegistrar} from "../src/l1-contracts/TaskAVSRegistrar.sol";
+import {IContractsRegistry} from "src/interfaces/IContractsRegistry.sol";
+import {Constants} from "src/constants.sol";
 
-contract DeployAVSL1Contracts is Script {
+contract DeployTaskAVSRegistrar is Script {
     // Eigenlayer Core Contracts
-    IAllocationManager public ALLOCATION_MANAGER = IAllocationManager(0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39);
+    IAllocationManager public allocationManager;
+    IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
 
-    function setUp() public {}
+    function setUp() public {
+        allocationManager = IAllocationManager(contractsRegistry.nameToAddress("allocationManager"));
+    }
 
-    function run(
-        address avs
-    ) public {
+    function run() public {
         // Load the private key from the environment variable
+        uint256 avsPrivateKey = vm.envUint("AVS_PRIVATE_KEY");
+        address avs = vm.addr(avsPrivateKey);
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
         address deployer = vm.addr(deployerPrivateKey);
 
@@ -24,9 +29,9 @@ contract DeployAVSL1Contracts is Script {
         vm.startBroadcast(deployerPrivateKey);
         console.log("Deployer address:", deployer);
 
-        TaskAVSRegistrar taskAVSRegistrar = new TaskAVSRegistrar(avs, ALLOCATION_MANAGER);
+        TaskAVSRegistrar taskAVSRegistrar = new TaskAVSRegistrar(avs, allocationManager);
         console.log("TaskAVSRegistrar deployed to:", address(taskAVSRegistrar));
-
+        contractsRegistry.registerContract("TaskAVSRegistrar", address(taskAVSRegistrar));
         vm.stopBroadcast();
     }
 }
