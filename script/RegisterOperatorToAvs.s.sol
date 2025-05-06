@@ -17,8 +17,9 @@ contract RegisterOperatorToAvs is Script {
     IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
     AllocationManager allocationManager;
 
-    BN254.G1Point  pubkeyG1;
-    BN254.G2Point  pubkeyG2;
+    BN254.G1Point pubkeyG1;
+    BN254.G2Point pubkeyG2;
+
     function setUp() public {
         allocationManager = AllocationManager(contractsRegistry.nameToAddress("allocationManager"));
     }

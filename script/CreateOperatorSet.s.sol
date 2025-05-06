@@ -22,9 +22,7 @@ contract CreateOperatorSet is Script {
         allocationManager = IAllocationManager(contractsRegistry.nameToAddress("allocationManager"));
     }
 
-    function run(
-        uint32 operatorSetId
-    ) public {
+    function run(uint32 operatorSetId) public {
         // Load the private key from the environment variable
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
         uint256 avsPrivateKey = vm.envUint("AVS_PRIVATE_KEY");

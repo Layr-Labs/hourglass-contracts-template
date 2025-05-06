@@ -15,9 +15,7 @@ contract RegisterOperatorToEigenLayer is Script {
         delegationManager = DelegationManager(contractsRegistry.nameToAddress("delegationManager"));
     }
 
-    function run(
-        uint256 operatorPvtKey
-    ) public {
+    function run(uint256 operatorPvtKey) public {
         address operator = vm.addr(operatorPvtKey);
         // Start broadcasting transactions
         vm.startBroadcast(operatorPvtKey);
