@@ -26,7 +26,7 @@ setup-avs-task-mailbox-config:
 
 # Create Task
 create-task:
-	forge script script/CreateTask.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(address, address)" $(TASK_MAILBOX_ADDRESS) $(AVS_ADDRESS)
+	forge script script/CreateTask.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(address, address, uint256)" $(TASK_MAILBOX_ADDRESS) $(AVS_ADDRESS) $(VALUE)
 
 # Helper message
 help:
@@ -37,6 +37,6 @@ help:
 	@echo "  make setup-avs-l1 TASK_AVS_REGISTRAR_ADDRESS=0x... - Setup AVS on L1"
 	@echo "  make deploy-avs-l2-contracts - Deploy AVS L2 Contracts"
 	@echo "  make setup-avs-task-mailbox-config TASK_MAILBOX_ADDRESS=0x... CERTIFICATE_VERIFIER_ADDRESS=0x... TASK_HOOK_ADDRESS=0x... - Setup AVS Task Mailbox Config"
-	@echo "  make create-task TASK_MAILBOX_ADDRESS=0x... AVS_ADDRESS=0x... - Create Task"
+	@echo "  make create-task TASK_MAILBOX_ADDRESS=0x... AVS_ADDRESS=0x... VALUE=5 - Create Task"
 	@echo ""
 	@echo "Note: Make sure to set RPC_URL and PRIVATE_KEY in your environment or .env file" 
