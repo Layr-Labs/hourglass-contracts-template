@@ -8,10 +8,6 @@ import {OperatorSet} from "@eigenlayer-contracts/src/contracts/libraries/Operato
 import {ITaskMailbox, ITaskMailboxTypes} from "@hourglass-monorepo/src/interfaces/core/ITaskMailbox.sol";
 
 contract CreateTask is Script {
-    struct PayloadParams {
-        uint256 value;
-    }
-
     function setUp() public {}
 
     function run(address taskMailbox, address avs, uint256 value) public {
@@ -28,14 +24,14 @@ contract CreateTask is Script {
             refundCollector: address(0),
             avsFee: 0,
             executorOperatorSet: executorOperatorSet,
-            payload: abi.encode(PayloadParams({value: value}))
+            payload: abi.encode(value)
         });
         bytes32 taskHash = ITaskMailbox(taskMailbox).createTask(taskParams);
         console.log("Created task with hash:");
         console.logBytes32(taskHash);
         ITaskMailboxTypes.Task memory task = ITaskMailbox(taskMailbox).getTaskInfo(taskHash);
         console.log("Task status:", uint8(task.status));
-        console.log("Task payload:", abi.decode(task.payload, (PayloadParams)).value);
+        console.log("Task payload:", abi.decode(task.payload, (uint256)));
 
         vm.stopBroadcast();
     }
