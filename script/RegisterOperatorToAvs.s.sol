@@ -3,7 +3,7 @@ pragma solidity ^0.8.27;
 
 import {Script, console} from "forge-std/Script.sol";
 import {IContractsRegistry} from "src/interfaces/IContractsRegistry.sol";
-import {Constants} from "src/constants.sol";
+import {MainnetConstants} from "src/MainnetConstants.sol";
 import {AllocationManager} from
     "@eigenlayer-middleware/lib/eigenlayer-contracts/src/contracts/core/AllocationManager.sol";
 import {IAllocationManagerTypes} from
@@ -20,7 +20,7 @@ contract RegisterOperatorToAvs is Script {
     BN254.G2Point pubkeyG2;
 
     function setUp() public {
-        allocationManager = AllocationManager(0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39);
+        allocationManager = AllocationManager(MainnetConstants.ALLOCATION_MANAGER);
     }
 
     function run(
@@ -33,13 +33,15 @@ contract RegisterOperatorToAvs is Script {
         uint256 g2_y_0,
         uint256 g2_y_1,
         uint256 pubkeyRegistrationMessageHash_X,
-        uint256 pubkeyRegistrationMessageHash_Y
+        uint256 pubkeyRegistrationMessageHash_Y,
+        string memory socket
     ) public {
         // Start broadcasting transactions
         vm.startBroadcast(operatorPvtKey);
         address operator = vm.addr(operatorPvtKey);
         uint256 avsPrivateKey = vm.envUint("AVS_PRIVATE_KEY");
         address avs = vm.addr(avsPrivateKey);
+        // We intentionally only take one operatorSetId as input , since user could provide different socket for different operator setid
         uint32[] memory operatorSetIds = new uint32[](1);
         operatorSetIds[0] = operatorSetId;
 
@@ -58,8 +60,8 @@ contract RegisterOperatorToAvs is Script {
             .PubkeyRegistrationParams({pubkeyRegistrationSignature: signature, pubkeyG1: pubkeyG1, pubkeyG2: pubkeyG2});
 
         // Compose final registration params
-        ITaskAVSRegistrarTypes.OperatorRegistrationParams memory operatorRegistrationParams = ITaskAVSRegistrarTypes
-            .OperatorRegistrationParams({socket: "localhost:1234", pubkeyRegistrationParams: pubkeyParams});
+        ITaskAVSRegistrarTypes.OperatorRegistrationParams memory operatorRegistrationParams =
+            ITaskAVSRegistrarTypes.OperatorRegistrationParams({socket: socket, pubkeyRegistrationParams: pubkeyParams});
 
         // Encode the struct
         bytes memory data = abi.encode(operatorRegistrationParams);

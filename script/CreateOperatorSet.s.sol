@@ -9,36 +9,33 @@ import {
 } from "@eigenlayer-contracts/src/contracts/interfaces/IAllocationManager.sol";
 
 import {IContractsRegistry} from "src/interfaces/IContractsRegistry.sol";
-import {Constants} from "src/constants.sol";
+import {MainnetConstants} from "src/MainnetConstants.sol";
 import {IStrategy} from "@eigenlayer-contracts/src/contracts/interfaces/IStrategy.sol";
 
 contract CreateOperatorSet is Script {
-    IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
-    IStrategy public STRATEGY_ST_ETH = IStrategy(0x93c4b944D05dfe6df7645A86cd2206016c51564D);
-
+    IContractsRegistry public contractsRegistry;
     IAllocationManager public allocationManager;
 
     function setUp() public {
-        allocationManager = IAllocationManager(0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39);
+        allocationManager = IAllocationManager(MainnetConstants.ALLOCATION_MANAGER);
+        contractsRegistry = IContractsRegistry(MainnetConstants.CONTRACTS_REGISTRY);
     }
 
-    function run(uint32 operatorSetId) public {
+    function run(uint32 operatorSetId, address[] memory strategiesAddress) public {
         // Load the private key from the environment variable
-        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
         uint256 avsPrivateKey = vm.envUint("AVS_PRIVATE_KEY");
-        address deployer = vm.addr(deployerPrivateKey);
         address avs = vm.addr(avsPrivateKey);
         vm.startBroadcast(avsPrivateKey);
-
-        IStrategy[] memory strategies = new IStrategy[](1);
-        strategies[0] = STRATEGY_ST_ETH;
+        IStrategy[] memory strategies = new IStrategy[](strategiesAddress.length);
+        for (uint256 i = 0; i < strategiesAddress.length; i++) {
+            strategies[i] = IStrategy(strategiesAddress[i]);
+        }
         IAllocationManagerTypes.CreateSetParams[] memory createOperatorSetParams =
             new IAllocationManagerTypes.CreateSetParams[](1);
         createOperatorSetParams[0] =
             IAllocationManagerTypes.CreateSetParams({operatorSetId: operatorSetId, strategies: strategies});
         allocationManager.createOperatorSets(avs, createOperatorSetParams);
         console.log("Operator sets created: ", allocationManager.getOperatorSetCount(avs));
-
         vm.stopBroadcast();
     }
 }

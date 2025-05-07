@@ -9,22 +9,18 @@ import {IAllocationManager} from
 import {AVSTaskHook} from "../src/l2-contracts/AVSTaskHook.sol";
 import {BN254CertificateVerifier} from "../src/l2-contracts/BN254CertificateVerifier.sol";
 import {IContractsRegistry} from "src/interfaces/IContractsRegistry.sol";
-import {Constants} from "src/constants.sol";
+import {MainnetConstants} from "src/MainnetConstants.sol";
 
 contract DeployAVSL2Contracts is Script {
-    IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
+    IContractsRegistry public contractsRegistry = IContractsRegistry(MainnetConstants.CONTRACTS_REGISTRY);
 
     function setUp() public {}
 
     function run() public {
         // Load the private key from the environment variable
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
-        address deployer = vm.addr(deployerPrivateKey);
-
-        // Deploy the AVSTaskHook and CertificateVerifier contracts
         vm.startBroadcast(deployerPrivateKey);
-        console.log("Deployer address:", deployer);
-
+        // Deploy the AVSTaskHook and CertificateVerifier contracts
         AVSTaskHook avsTaskHook = new AVSTaskHook();
         console.log("AVSTaskHook deployed to:", address(avsTaskHook));
         contractsRegistry.registerContract("AVSTaskHook", address(avsTaskHook));

@@ -10,7 +10,7 @@ contract DeployContractsRegistry is Script {
     function setUp() public {}
 
     function run() public {
-        uint deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
+        uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
         vm.startBroadcast(deployerPrivateKey);
 
         registry = new ContractsRegistry();

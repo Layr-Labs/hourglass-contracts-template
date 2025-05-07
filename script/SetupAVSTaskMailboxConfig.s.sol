@@ -13,10 +13,10 @@ import {ITaskMailbox, ITaskMailboxTypes} from "@hourglass-monorepo/src/interface
 import {IAVSTaskHook} from "@hourglass-monorepo/src/interfaces/avs/l2/IAVSTaskHook.sol";
 import {IBN254CertificateVerifier} from "@hourglass-monorepo/src/interfaces/avs/l2/IBN254CertificateVerifier.sol";
 import {IContractsRegistry} from "src/interfaces/IContractsRegistry.sol";
-import {Constants} from "src/constants.sol";
+import {MainnetConstants} from "src/MainnetConstants.sol";
 
 contract SetupAVSTaskMailboxConfig is Script {
-    IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
+    IContractsRegistry public contractsRegistry = IContractsRegistry(MainnetConstants.CONTRACTS_REGISTRY);
 
     function setUp() public {}
 

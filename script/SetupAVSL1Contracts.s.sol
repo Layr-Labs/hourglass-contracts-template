@@ -10,21 +10,23 @@ import {
 import {IAVSRegistrar} from "@eigenlayer-middleware/lib/eigenlayer-contracts/src/contracts/interfaces/IAVSRegistrar.sol";
 import {IStrategy} from "@eigenlayer-middleware/lib/eigenlayer-contracts/src/contracts/interfaces/IStrategy.sol";
 import {ITaskAVSRegistrar} from "@hourglass-monorepo/src/interfaces/avs/l1/ITaskAVSRegistrar.sol";
-import {Constants} from "src/constants.sol";
+import {MainnetConstants} from "src/MainnetConstants.sol";
 import {IContractsRegistry} from "src/interfaces/IContractsRegistry.sol";
 
 contract SetupAVSL1Contracts is Script {
-    IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
+    IContractsRegistry public contractsRegistry = IContractsRegistry(MainnetConstants.CONTRACTS_REGISTRY);
     // Eigenlayer Core Contracts
     IAllocationManager public allocationManager;
 
     // Eigenlayer Strategies
 
     function setUp() public {
-        allocationManager = IAllocationManager(0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39);
+        allocationManager = IAllocationManager(MainnetConstants.ALLOCATION_MANAGER);
     }
 
-    function run() public {
+    function run(
+        string memory metadataURI
+    ) public {
         address taskAVSRegistrar = contractsRegistry.nameToAddress("TaskAVSRegistrar");
         // Load the private key from the environment variable
         uint256 avsPrivateKey = vm.envUint("AVS_PRIVATE_KEY");
@@ -33,7 +35,7 @@ contract SetupAVSL1Contracts is Script {
         vm.startBroadcast(avsPrivateKey);
 
         // 1. Update the AVS metadata URI
-        allocationManager.updateAVSMetadataURI(avs, "Test AVS");
+        allocationManager.updateAVSMetadataURI(avs, metadataURI);
         // 2. Set the AVS Registrar
         allocationManager.setAVSRegistrar(avs, IAVSRegistrar(taskAVSRegistrar));
         // console.log("AVS Registrar set:", address(allocationManager.getAVSRegistrar(avs)));

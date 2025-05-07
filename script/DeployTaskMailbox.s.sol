@@ -4,12 +4,14 @@ pragma solidity ^0.8.27;
 import {Script, console} from "forge-std/Script.sol";
 import {TaskMailbox} from "@hourglass-monorepo/src/core/TaskMailbox.sol";
 import {IContractsRegistry} from "src/interfaces/IContractsRegistry.sol";
-import {Constants} from "src/constants.sol";
+import {MainnetConstants} from "src/MainnetConstants.sol";
 
 contract DeployTaskMailbox is Script {
-    IContractsRegistry public contractsRegistry = IContractsRegistry(Constants.CONTRACTS_REGISTRY);
+    IContractsRegistry public contractsRegistry;
 
-    function setUp() public {}
+    function setUp() public {
+        contractsRegistry = IContractsRegistry(MainnetConstants.CONTRACTS_REGISTRY);
+    }
 
     function run() public {
         // Get the private key from the environment variable

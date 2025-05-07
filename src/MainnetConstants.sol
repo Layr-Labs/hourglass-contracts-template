@@ -1,0 +1,8 @@
+pragma solidity ^0.8.27;
+
+library MainnetConstants {
+    address public constant CONTRACTS_REGISTRY = 0x787c6666213624D788522d516847978D7F348902;
+    address public constant ALLOCATION_MANAGER = 0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39;
+    address public constant STRATEGY_MANAGER = 0x858646372CC42E1A627fcE94aa7A7033e7CF075A;
+    address public constant DELEGATION_MANAGER = 0x39053D51B77DC0d36036Fc1fCc8Cb819df8Ef37A;
+}
