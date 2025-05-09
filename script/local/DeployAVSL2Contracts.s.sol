@@ -3,8 +3,8 @@ pragma solidity ^0.8.27;
 
 import {Script, console} from "forge-std/Script.sol";
 
-import {AVSTaskHook} from "../src/l2-contracts/AVSTaskHook.sol";
-import {BN254CertificateVerifier} from "../src/l2-contracts/BN254CertificateVerifier.sol";
+import {AVSTaskHook} from "../../src/l2-contracts/AVSTaskHook.sol";
+import {BN254CertificateVerifier} from "../../src/l2-contracts/BN254CertificateVerifier.sol";
 
 contract DeployAVSL2Contracts is Script {
     function setUp() public {}

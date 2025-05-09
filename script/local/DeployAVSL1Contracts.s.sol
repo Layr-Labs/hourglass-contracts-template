@@ -5,7 +5,7 @@ import {Script, console} from "forge-std/Script.sol";
 
 import {IAllocationManager} from "@eigenlayer-contracts/src/contracts/interfaces/IAllocationManager.sol";
 
-import {TaskAVSRegistrar} from "../src/l1-contracts/TaskAVSRegistrar.sol";
+import {TaskAVSRegistrar} from "../../src/l1-contracts/TaskAVSRegistrar.sol";
 
 contract DeployAVSL1Contracts is Script {
     // Eigenlayer Core Contracts
