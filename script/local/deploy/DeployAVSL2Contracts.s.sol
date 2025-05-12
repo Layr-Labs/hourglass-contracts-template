@@ -26,10 +26,15 @@ contract DeployAVSL2Contracts is Script {
 
         vm.stopBroadcast();
 
+        // Write deployment info to output file
+        _writeOutputToJson(address(avsTaskHook), address(bn254CertificateVerifier));
+    }
+
+    function _writeOutputToJson(address avsTaskHook, address bn254CertificateVerifier) internal {
         // Add the addresses object
         string memory addresses = "addresses";
-        vm.serializeAddress(addresses, "avsTaskHook", address(avsTaskHook));
-        addresses = vm.serializeAddress(addresses, "bn254CertificateVerifier", address(bn254CertificateVerifier));
+        vm.serializeAddress(addresses, "avsTaskHook", avsTaskHook);
+        addresses = vm.serializeAddress(addresses, "bn254CertificateVerifier", bn254CertificateVerifier);
 
         // Add the chainInfo object 
         string memory chainInfo = "chainInfo";

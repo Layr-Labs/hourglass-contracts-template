@@ -13,12 +13,8 @@ contract CreateTask is Script {
     function setUp() public {}
 
     function run(address avs, bytes memory payload) public {
-        // Load the output file
-        string memory hourglassConfigFile = string.concat("script/local/", "output/deploy_hourglass_core_output.json");
-        string memory hourglassConfig = vm.readFile(hourglassConfigFile);
-
-        // Parse the addresses
-        address taskMailbox = stdJson.readAddress(hourglassConfig, ".addresses.taskMailbox");
+        // Read TaskMailbox address from config
+        address taskMailbox = _readTaskMailboxAddress();
         console.log("Task Mailbox:", taskMailbox);
 
         // Load the private key from the environment variable
@@ -44,5 +40,14 @@ contract CreateTask is Script {
         console.logBytes(task.payload);
 
         vm.stopBroadcast();
+    }
+
+    function _readTaskMailboxAddress() internal returns (address) {
+        // Load the output file
+        string memory hourglassConfigFile = string.concat("script/local/", "output/deploy_hourglass_core_output.json");
+        string memory hourglassConfig = vm.readFile(hourglassConfigFile);
+
+        // Parse and return the TaskMailbox address
+        return stdJson.readAddress(hourglassConfig, ".addresses.taskMailbox");
     }
 }

@@ -20,7 +20,7 @@ contract DeployAVSL1Contracts is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
         address deployer = vm.addr(deployerPrivateKey);
 
-        // 1. Deploy the TaskAVSRegistrar middleware contract
+        // Deploy the TaskAVSRegistrar middleware contract
         vm.startBroadcast(deployerPrivateKey);
         console.log("Deployer address:", deployer);
 
@@ -29,9 +29,14 @@ contract DeployAVSL1Contracts is Script {
 
         vm.stopBroadcast();
 
+        // Write deployment info to output file
+        _writeOutputToJson(address(taskAVSRegistrar), avs);
+    }
+
+    function _writeOutputToJson(address taskAVSRegistrar, address avs) internal {
         // Add the addresses object
         string memory addresses = "addresses";
-        addresses = vm.serializeAddress(addresses, "taskAVSRegistrar", address(taskAVSRegistrar));
+        addresses = vm.serializeAddress(addresses, "taskAVSRegistrar", taskAVSRegistrar);
 
         // Add the chainInfo object
         string memory chainInfo = "chainInfo";
