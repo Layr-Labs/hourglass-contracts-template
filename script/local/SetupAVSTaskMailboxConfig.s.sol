@@ -2,6 +2,7 @@
 pragma solidity ^0.8.27;
 
 import {Script, console} from "forge-std/Script.sol";
+import {stdJson} from "forge-std/StdJson.sol";
 
 import {OperatorSet, OperatorSetLib} from "@eigenlayer-contracts/src/contracts/libraries/OperatorSetLib.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
@@ -11,9 +12,29 @@ import {IAVSTaskHook} from "@hourglass-monorepo/src/interfaces/avs/l2/IAVSTaskHo
 import {IBN254CertificateVerifier} from "@hourglass-monorepo/src/interfaces/avs/l2/IBN254CertificateVerifier.sol";
 
 contract SetupAVSTaskMailboxConfig is Script {
+    using stdJson for string;
+
     function setUp() public {}
 
-    function run(address taskMailbox, address certificateVerifier, address taskHook) public {
+    function run() public {
+        // Load the output file
+        string memory hourglassConfigFile = string.concat("script/local/", "output/deploy_hourglass_core_output.json");
+        string memory hourglassConfig = vm.readFile(hourglassConfigFile);
+
+        // Parse the addresses
+        address taskMailbox = stdJson.readAddress(hourglassConfig, ".addresses.taskMailbox");
+        console.log("Task Mailbox:", taskMailbox);
+
+        // Load the output file
+        string memory avsL2ConfigFile = string.concat("script/local/", "output/deploy_avs_l2_output.json");
+        string memory avsL2Config = vm.readFile(avsL2ConfigFile);
+
+        // Parse the addresses
+        address taskHook = stdJson.readAddress(avsL2Config, ".addresses.avsTaskHook");
+        console.log("AVS Task Hook:", taskHook);
+        address certificateVerifier = stdJson.readAddress(avsL2Config, ".addresses.bn254CertificateVerifier");
+        console.log("BN254 Certificate Verifier:", certificateVerifier);
+
         // Load the private key from the environment variable
         uint256 avsPrivateKey = vm.envUint("PRIVATE_KEY_AVS");
         address avs = vm.addr(avsPrivateKey);

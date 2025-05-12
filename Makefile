@@ -22,7 +22,7 @@ deploy-avs-l2-contracts:
 
 # Setup AVS Task Mailbox Config
 setup-avs-task-mailbox-config:
-	forge script script/local/SetupAVSTaskMailboxConfig.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(address, address, address)" $(TASK_MAILBOX_ADDRESS) $(CERTIFICATE_VERIFIER_ADDRESS) $(TASK_HOOK_ADDRESS) -vvvv
+	forge script script/local/SetupAVSTaskMailboxConfig.s.sol --rpc-url $(RPC_URL) --broadcast -vvvv
 
 # Create Task
 create-task:

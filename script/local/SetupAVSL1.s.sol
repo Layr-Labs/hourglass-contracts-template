@@ -12,7 +12,7 @@ import {IStrategy} from "@eigenlayer-contracts/src/contracts/interfaces/IStrateg
 
 contract SetupAVSL1 is Script {
     using stdJson for string;
-    
+
     // Eigenlayer Core Contracts
     IAllocationManager public ALLOCATION_MANAGER = IAllocationManager(0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39);
 
@@ -24,11 +24,11 @@ contract SetupAVSL1 is Script {
 
     function run() public {
         // Load the output file
-        string memory configFile = string.concat("script/local/", "output/deploy_avs_l1_output.json");
-        string memory config = vm.readFile(configFile);
+        string memory avsL1ConfigFile = string.concat("script/local/", "output/deploy_avs_l1_output.json");
+        string memory avsL1Config = vm.readFile(avsL1ConfigFile);
 
         // Parse the addresses
-        address taskAVSRegistrar = stdJson.readAddress(config, ".addresses.taskAVSRegistrar");
+        address taskAVSRegistrar = stdJson.readAddress(avsL1Config, ".addresses.taskAVSRegistrar");
         console.log("Task AVS Registrar:", taskAVSRegistrar);
 
         // Load the private key from the environment variable
