@@ -2,13 +2,10 @@
 pragma solidity ^0.8.27;
 
 import {Script, console} from "forge-std/Script.sol";
-import {stdJson} from "forge-std/StdJson.sol";
 
 import {TaskMailbox} from "@hourglass-monorepo/src/core/TaskMailbox.sol";
 
 contract DeployTaskMailbox is Script {
-    using stdJson for string;
-
     function setUp() public {}
 
     function run() public {

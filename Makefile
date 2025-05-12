@@ -14,7 +14,7 @@ deploy-avs-l1-contracts:
 
 # Setup AVS L1
 setup-avs-l1:
-	forge script script/local/SetupAVSL1.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(address)" $(TASK_AVS_REGISTRAR_ADDRESS) -vvvv
+	forge script script/local/SetupAVSL1.s.sol --rpc-url $(RPC_URL) --broadcast -vvvv
 
 # Deploy AVS L2 Contracts
 deploy-avs-l2-contracts:

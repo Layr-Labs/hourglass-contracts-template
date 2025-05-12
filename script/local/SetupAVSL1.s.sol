@@ -2,7 +2,7 @@
 pragma solidity ^0.8.27;
 
 import {Script, console} from "forge-std/Script.sol";
-
+import {stdJson} from "forge-std/StdJson.sol";
 import {
     IAllocationManager,
     IAllocationManagerTypes
@@ -11,6 +11,8 @@ import {IAVSRegistrar} from "@eigenlayer-contracts/src/contracts/interfaces/IAVS
 import {IStrategy} from "@eigenlayer-contracts/src/contracts/interfaces/IStrategy.sol";
 
 contract SetupAVSL1 is Script {
+    using stdJson for string;
+    
     // Eigenlayer Core Contracts
     IAllocationManager public ALLOCATION_MANAGER = IAllocationManager(0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39);
 
@@ -20,9 +22,15 @@ contract SetupAVSL1 is Script {
 
     function setUp() public {}
 
-    function run(
-        address taskAVSRegistrar
-    ) public {
+    function run() public {
+        // Load the output file
+        string memory configFile = string.concat("script/local/", "output/deploy_avs_l1_output.json");
+        string memory config = vm.readFile(configFile);
+
+        // Parse the addresses
+        address taskAVSRegistrar = stdJson.readAddress(config, ".addresses.taskAVSRegistrar");
+        console.log("Task AVS Registrar:", taskAVSRegistrar);
+
         // Load the private key from the environment variable
         uint256 avsPrivateKey = vm.envUint("PRIVATE_KEY_AVS");
         address avs = vm.addr(avsPrivateKey);

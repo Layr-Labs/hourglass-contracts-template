@@ -42,7 +42,7 @@ make deploy-avs-l1-contracts AVS_ADDRESS='0x70997970C51812dc3A010C7d01b50e0d17dc
 Register the AVS L1 contracts with the EigenLayer core protocol:
 
 ```sh
-make setup-avs-l1 TASK_AVS_REGISTRAR_ADDRESS='0xf4c5C29b14f0237131F7510A51684c8191f98E06' RPC_URL="127.0.0.1:8545"
+make setup-avs-l1 RPC_URL="127.0.0.1:8545"
 ```
 
 ### 5. Deploy AVS L2 Contracts
