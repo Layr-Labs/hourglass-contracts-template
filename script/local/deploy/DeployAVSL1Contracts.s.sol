@@ -8,15 +8,7 @@ import {IAllocationManager} from "@eigenlayer-contracts/src/contracts/interfaces
 import {TaskAVSRegistrar} from "../../../src/l1-contracts/TaskAVSRegistrar.sol";
 
 contract DeployAVSL1Contracts is Script {
-    // Eigenlayer Core Contracts
-    IAllocationManager public ALLOCATION_MANAGER = IAllocationManager(0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39);
-
-    function setUp() public {}
-
-    function run(
-        string memory environment,
-        address avs
-    ) public {
+    function run(string memory environment, address avs, address allocationManager) public {
         // Load the private key from the environment variable
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
         address deployer = vm.addr(deployerPrivateKey);
@@ -25,16 +17,21 @@ contract DeployAVSL1Contracts is Script {
         vm.startBroadcast(deployerPrivateKey);
         console.log("Deployer address:", deployer);
 
-        TaskAVSRegistrar taskAVSRegistrar = new TaskAVSRegistrar(avs, ALLOCATION_MANAGER);
+        TaskAVSRegistrar taskAVSRegistrar = new TaskAVSRegistrar(avs, IAllocationManager(allocationManager));
         console.log("TaskAVSRegistrar deployed to:", address(taskAVSRegistrar));
 
         vm.stopBroadcast();
 
         // Write deployment info to output file
-        _writeOutputToJson(environment, address(taskAVSRegistrar), avs);
+        _writeOutputToJson(environment, address(taskAVSRegistrar), avs, allocationManager);
     }
 
-    function _writeOutputToJson(string memory environment, address taskAVSRegistrar, address avs) internal {
+    function _writeOutputToJson(
+        string memory environment,
+        address taskAVSRegistrar,
+        address avs,
+        address allocationManager
+    ) internal {
         // Add the addresses object
         string memory addresses = "addresses";
         addresses = vm.serializeAddress(addresses, "taskAVSRegistrar", taskAVSRegistrar);
@@ -46,7 +43,8 @@ contract DeployAVSL1Contracts is Script {
 
         // Add parameters object
         string memory parameters = "parameters";
-        parameters = vm.serializeAddress(parameters, "avs", avs);
+        vm.serializeAddress(parameters, "avs", avs);
+        parameters = vm.serializeAddress(parameters, "allocationManager", allocationManager);
 
         // Finalize the JSON
         string memory finalJson = "final";

@@ -12,7 +12,7 @@ contract CreateTask is Script {
 
     function setUp() public {}
 
-    function run(string memory environment, address avs, bytes memory payload) public {
+    function run(string memory environment, address avs, uint32 executorOperatorSetId, bytes memory payload) public {
         // Read TaskMailbox address from config
         address taskMailbox = _readTaskMailboxAddress(environment);
         console.log("Task Mailbox:", taskMailbox);
@@ -25,7 +25,7 @@ contract CreateTask is Script {
         console.log("App address:", app);
 
         // Call createTask
-        OperatorSet memory executorOperatorSet = OperatorSet({avs: avs, id: 1});
+        OperatorSet memory executorOperatorSet = OperatorSet({avs: avs, id: executorOperatorSetId});
         ITaskMailboxTypes.TaskParams memory taskParams = ITaskMailboxTypes.TaskParams({
             refundCollector: address(0),
             avsFee: 0,
@@ -42,9 +42,12 @@ contract CreateTask is Script {
         vm.stopBroadcast();
     }
 
-    function _readTaskMailboxAddress(string memory environment) internal view returns (address) {
+    function _readTaskMailboxAddress(
+        string memory environment
+    ) internal view returns (address) {
         // Load the output file
-        string memory hourglassConfigFile = string.concat("script/", environment, "/output/deploy_hourglass_core_output.json");
+        string memory hourglassConfigFile =
+            string.concat("script/", environment, "/output/deploy_hourglass_core_output.json");
         string memory hourglassConfig = vm.readFile(hourglassConfigFile);
 
         // Parse and return the TaskMailbox address

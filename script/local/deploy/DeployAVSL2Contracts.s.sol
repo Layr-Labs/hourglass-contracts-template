@@ -7,9 +7,9 @@ import {AVSTaskHook} from "../../../src/l2-contracts/AVSTaskHook.sol";
 import {BN254CertificateVerifier} from "../../../src/l2-contracts/BN254CertificateVerifier.sol";
 
 contract DeployAVSL2Contracts is Script {
-    function setUp() public {}
-
-    function run(string memory environment) public {
+    function run(
+        string memory environment
+    ) public {
         // Load the private key from the environment variable
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
         address deployer = vm.addr(deployerPrivateKey);
@@ -30,13 +30,17 @@ contract DeployAVSL2Contracts is Script {
         _writeOutputToJson(environment, address(avsTaskHook), address(bn254CertificateVerifier));
     }
 
-    function _writeOutputToJson(string memory environment, address avsTaskHook, address bn254CertificateVerifier) internal {
+    function _writeOutputToJson(
+        string memory environment,
+        address avsTaskHook,
+        address bn254CertificateVerifier
+    ) internal {
         // Add the addresses object
         string memory addresses = "addresses";
         vm.serializeAddress(addresses, "avsTaskHook", avsTaskHook);
         addresses = vm.serializeAddress(addresses, "bn254CertificateVerifier", bn254CertificateVerifier);
 
-        // Add the chainInfo object 
+        // Add the chainInfo object
         string memory chainInfo = "chainInfo";
         vm.serializeUint(chainInfo, "chainId", block.chainid);
         chainInfo = vm.serializeUint(chainInfo, "deploymentBlock", block.number);

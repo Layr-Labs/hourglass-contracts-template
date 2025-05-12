@@ -13,16 +13,15 @@ import {IStrategy} from "@eigenlayer-contracts/src/contracts/interfaces/IStrateg
 contract SetupAVSL1 is Script {
     using stdJson for string;
 
-    // Eigenlayer Core Contracts
-    IAllocationManager public ALLOCATION_MANAGER = IAllocationManager(0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39);
-
-    // Eigenlayer Strategies
-    IStrategy public STRATEGY_EIGEN = IStrategy(0xaCB55C530Acdb2849e6d4f36992Cd8c9D50ED8F7);
-    IStrategy public STRATEGY_STETH = IStrategy(0x93c4b944D05dfe6df7645A86cd2206016c51564D);
-
-    function setUp() public {}
-
-    function run(string memory environment) public {
+    function run(
+        string memory environment,
+        address allocationManager,
+        string memory metadataURI,
+        uint32 aggregatorOperatorSetId,
+        address[] memory aggregatorStrategies,
+        uint32 executorOperatorSetId,
+        address[] memory executorStrategies
+    ) public {
         // Load config and get addresses
         address taskAVSRegistrar = _readConfigAddress(environment, "taskAVSRegistrar");
         console.log("Task AVS Registrar:", taskAVSRegistrar);
@@ -35,23 +34,34 @@ contract SetupAVSL1 is Script {
         console.log("AVS address:", avs);
 
         // 1. Update the AVS metadata URI
-        ALLOCATION_MANAGER.updateAVSMetadataURI(avs, "Test AVS");
-        console.log("AVS metadata URI updated: Test AVS");
+        IAllocationManager(allocationManager).updateAVSMetadataURI(avs, metadataURI);
+        console.log("AVS metadata URI updated:", metadataURI);
 
         // 2. Set the AVS Registrar
-        ALLOCATION_MANAGER.setAVSRegistrar(avs, IAVSRegistrar(taskAVSRegistrar));
-        console.log("AVS Registrar set:", address(ALLOCATION_MANAGER.getAVSRegistrar(avs)));
+        IAllocationManager(allocationManager).setAVSRegistrar(avs, IAVSRegistrar(taskAVSRegistrar));
+        console.log("AVS Registrar set:", address(IAllocationManager(allocationManager).getAVSRegistrar(avs)));
 
         // 3. Create the operator sets
-        IStrategy[] memory strategies = new IStrategy[](2);
-        strategies[0] = STRATEGY_EIGEN;
-        strategies[1] = STRATEGY_STETH;
+        IStrategy[] memory aggregatorStrategiesArray = new IStrategy[](aggregatorStrategies.length);
+        for (uint256 i = 0; i < aggregatorStrategies.length; i++) {
+            aggregatorStrategiesArray[i] = IStrategy(aggregatorStrategies[i]);
+        }
+        IStrategy[] memory executorStrategiesArray = new IStrategy[](executorStrategies.length);
+        for (uint256 i = 0; i < executorStrategies.length; i++) {
+            executorStrategiesArray[i] = IStrategy(executorStrategies[i]);
+        }
         IAllocationManagerTypes.CreateSetParams[] memory createOperatorSetParams =
             new IAllocationManagerTypes.CreateSetParams[](2);
-        createOperatorSetParams[0] = IAllocationManagerTypes.CreateSetParams({operatorSetId: 0, strategies: strategies});
-        createOperatorSetParams[1] = IAllocationManagerTypes.CreateSetParams({operatorSetId: 1, strategies: strategies});
-        ALLOCATION_MANAGER.createOperatorSets(avs, createOperatorSetParams);
-        console.log("Operator sets created: ", ALLOCATION_MANAGER.getOperatorSetCount(avs));
+        createOperatorSetParams[0] = IAllocationManagerTypes.CreateSetParams({
+            operatorSetId: aggregatorOperatorSetId,
+            strategies: aggregatorStrategiesArray
+        });
+        createOperatorSetParams[1] = IAllocationManagerTypes.CreateSetParams({
+            operatorSetId: executorOperatorSetId,
+            strategies: executorStrategiesArray
+        });
+        IAllocationManager(allocationManager).createOperatorSets(avs, createOperatorSetParams);
+        console.log("Operator sets created: ", IAllocationManager(allocationManager).getOperatorSetCount(avs));
 
         vm.stopBroadcast();
     }

@@ -6,9 +6,9 @@ import {Script, console} from "forge-std/Script.sol";
 import {TaskMailbox} from "@hourglass-monorepo/src/core/TaskMailbox.sol";
 
 contract DeployTaskMailbox is Script {
-    function setUp() public {}
-
-    function run(string memory environment) public {
+    function run(
+        string memory environment
+    ) public {
         // Load the private key from the environment variable
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
         address deployer = vm.addr(deployerPrivateKey);

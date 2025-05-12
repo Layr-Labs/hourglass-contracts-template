@@ -16,7 +16,12 @@ contract SetupAVSTaskMailboxConfig is Script {
 
     function setUp() public {}
 
-    function run(string memory environment) public {
+    function run(
+        string memory environment,
+        uint32 aggregatorOperatorSetId,
+        uint32 executorOperatorSetId,
+        uint96 taskSLA
+    ) public {
         // Read addresses from config files
         address taskMailbox = _readHourglassConfigAddress(environment, "taskMailbox");
         console.log("Task Mailbox:", taskMailbox);
@@ -36,10 +41,10 @@ contract SetupAVSTaskMailboxConfig is Script {
 
         // 1. Set the AVS config
         uint32[] memory executorOperatorSetIds = new uint32[](1);
-        executorOperatorSetIds[0] = 1;
+        executorOperatorSetIds[0] = executorOperatorSetId;
         ITaskMailboxTypes.AvsConfig memory avsConfig = ITaskMailboxTypes.AvsConfig({
             resultSubmitter: avs,
-            aggregatorOperatorSetId: 0,
+            aggregatorOperatorSetId: aggregatorOperatorSetId,
             executorOperatorSetIds: executorOperatorSetIds
         });
         ITaskMailbox(taskMailbox).setAvsConfig(avs, avsConfig);
@@ -58,13 +63,15 @@ contract SetupAVSTaskMailboxConfig is Script {
             taskHook: IAVSTaskHook(taskHook),
             feeToken: IERC20(address(0)),
             feeCollector: address(0),
-            taskSLA: 60,
+            taskSLA: taskSLA,
             stakeProportionThreshold: 10_000,
             taskMetadata: bytes("")
         });
-        ITaskMailbox(taskMailbox).setExecutorOperatorSetTaskConfig(OperatorSet(avs, 1), executorOperatorSetTaskConfig);
+        ITaskMailbox(taskMailbox).setExecutorOperatorSetTaskConfig(
+            OperatorSet(avs, executorOperatorSetId), executorOperatorSetTaskConfig
+        );
         ITaskMailboxTypes.ExecutorOperatorSetTaskConfig memory executorOperatorSetTaskConfigStored =
-            ITaskMailbox(taskMailbox).getExecutorOperatorSetTaskConfig(OperatorSet(avs, 1));
+            ITaskMailbox(taskMailbox).getExecutorOperatorSetTaskConfig(OperatorSet(avs, executorOperatorSetId));
         console.log(
             "Executor Operator Set Task Config set:",
             executorOperatorSetTaskConfigStored.certificateVerifier,
@@ -74,9 +81,13 @@ contract SetupAVSTaskMailboxConfig is Script {
         vm.stopBroadcast();
     }
 
-    function _readHourglassConfigAddress(string memory environment, string memory key) internal view returns (address) {
+    function _readHourglassConfigAddress(
+        string memory environment,
+        string memory key
+    ) internal view returns (address) {
         // Load the Hourglass config file
-        string memory hourglassConfigFile = string.concat("script/", environment, "/output/deploy_hourglass_core_output.json");
+        string memory hourglassConfigFile =
+            string.concat("script/", environment, "/output/deploy_hourglass_core_output.json");
         string memory hourglassConfig = vm.readFile(hourglassConfigFile);
 
         // Parse and return the address
