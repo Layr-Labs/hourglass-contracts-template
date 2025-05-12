@@ -2,15 +2,25 @@
 pragma solidity ^0.8.27;
 
 import {Script, console} from "forge-std/Script.sol";
-
+import {stdJson} from "forge-std/StdJson.sol";
 import {OperatorSet} from "@eigenlayer-contracts/src/contracts/libraries/OperatorSetLib.sol";
 
 import {ITaskMailbox, ITaskMailboxTypes} from "@hourglass-monorepo/src/interfaces/core/ITaskMailbox.sol";
 
 contract CreateTask is Script {
+    using stdJson for string;
+
     function setUp() public {}
 
-    function run(address taskMailbox, address avs, uint256 value) public {
+    function run(address avs, bytes memory payload) public {
+        // Load the output file
+        string memory hourglassConfigFile = string.concat("script/local/", "output/deploy_hourglass_core_output.json");
+        string memory hourglassConfig = vm.readFile(hourglassConfigFile);
+
+        // Parse the addresses
+        address taskMailbox = stdJson.readAddress(hourglassConfig, ".addresses.taskMailbox");
+        console.log("Task Mailbox:", taskMailbox);
+
         // Load the private key from the environment variable
         uint256 appPrivateKey = vm.envUint("PRIVATE_KEY_APP");
         address app = vm.addr(appPrivateKey);
@@ -24,14 +34,14 @@ contract CreateTask is Script {
             refundCollector: address(0),
             avsFee: 0,
             executorOperatorSet: executorOperatorSet,
-            payload: abi.encode(value)
+            payload: payload
         });
         bytes32 taskHash = ITaskMailbox(taskMailbox).createTask(taskParams);
         console.log("Created task with hash:");
         console.logBytes32(taskHash);
         ITaskMailboxTypes.Task memory task = ITaskMailbox(taskMailbox).getTaskInfo(taskHash);
         console.log("Task status:", uint8(task.status));
-        console.log("Task payload:", abi.decode(task.payload, (uint256)));
+        console.logBytes(task.payload);
 
         vm.stopBroadcast();
     }

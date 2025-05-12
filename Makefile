@@ -26,7 +26,7 @@ setup-avs-task-mailbox-config:
 
 # Create Task
 create-task:
-	forge script script/local/run/CreateTask.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(address, address, uint256)" $(TASK_MAILBOX_ADDRESS) $(AVS_ADDRESS) $(VALUE) -vvvv
+	forge script script/local/run/CreateTask.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(address, bytes)" $(AVS_ADDRESS) $(PAYLOAD) -vvvv
 
 # Helper message
 help:
