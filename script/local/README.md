@@ -26,7 +26,7 @@ This will run a local node at `127.0.0.1:8545`.
 In a new terminal, deploy the TaskMailbox contract to your local fork:
 
 ```sh
-make deploy-task-mailbox RPC_URL="127.0.0.1:8545"
+make deploy-task-mailbox ENVIRONMENT="local" RPC_URL="127.0.0.1:8545"
 ```
 
 ### 3. Deploy AVS L1 Contracts
@@ -34,7 +34,7 @@ make deploy-task-mailbox RPC_URL="127.0.0.1:8545"
 Deploy the AVS L1 contracts, specifying the AVS address:
 
 ```sh
-make deploy-avs-l1-contracts AVS_ADDRESS='0x70997970C51812dc3A010C7d01b50e0d17dc79C8' RPC_URL="127.0.0.1:8545"
+make deploy-avs-l1-contracts ENVIRONMENT="local" AVS_ADDRESS='0x70997970C51812dc3A010C7d01b50e0d17dc79C8' RPC_URL="127.0.0.1:8545"
 ```
 
 ### 4. Setup AVS L1
@@ -42,7 +42,7 @@ make deploy-avs-l1-contracts AVS_ADDRESS='0x70997970C51812dc3A010C7d01b50e0d17dc
 Register the AVS L1 contracts with the EigenLayer core protocol:
 
 ```sh
-make setup-avs-l1 RPC_URL="127.0.0.1:8545"
+make setup-avs-l1 ENVIRONMENT="local" RPC_URL="127.0.0.1:8545"
 ```
 
 ### 5. Deploy AVS L2 Contracts
@@ -50,7 +50,7 @@ make setup-avs-l1 RPC_URL="127.0.0.1:8545"
 Deploy the AVS L2 contracts:
 
 ```sh
-make deploy-avs-l2-contracts RPC_URL="127.0.0.1:8545"
+make deploy-avs-l2-contracts ENVIRONMENT="local" RPC_URL="127.0.0.1:8545"
 ```
 
 ### 6. Setup AVS Task Mailbox Config
@@ -58,7 +58,7 @@ make deploy-avs-l2-contracts RPC_URL="127.0.0.1:8545"
 Configure the TaskMailbox with the required addresses:
 
 ```sh
-make setup-avs-task-mailbox-config RPC_URL="127.0.0.1:8545"
+make setup-avs-task-mailbox-config ENVIRONMENT="local" RPC_URL="127.0.0.1:8545"
 ```
 
 ### 7. Create Task
@@ -67,6 +67,7 @@ Create a Task on L2 Mailbox
 
 ```sh
 make create-task \
+  ENVIRONMENT="local" \
   AVS_ADDRESS='0x70997970C51812dc3A010C7d01b50e0d17dc79C8' \
   PAYLOAD='0x0000000000000000000000000000000000000000000000000000000000000005' \
   RPC_URL="127.0.0.1:8545"

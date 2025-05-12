@@ -9,7 +9,7 @@ import {BN254CertificateVerifier} from "../../../src/l2-contracts/BN254Certifica
 contract DeployAVSL2Contracts is Script {
     function setUp() public {}
 
-    function run() public {
+    function run(string memory environment) public {
         // Load the private key from the environment variable
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
         address deployer = vm.addr(deployerPrivateKey);
@@ -27,10 +27,10 @@ contract DeployAVSL2Contracts is Script {
         vm.stopBroadcast();
 
         // Write deployment info to output file
-        _writeOutputToJson(address(avsTaskHook), address(bn254CertificateVerifier));
+        _writeOutputToJson(environment, address(avsTaskHook), address(bn254CertificateVerifier));
     }
 
-    function _writeOutputToJson(address avsTaskHook, address bn254CertificateVerifier) internal {
+    function _writeOutputToJson(string memory environment, address avsTaskHook, address bn254CertificateVerifier) internal {
         // Add the addresses object
         string memory addresses = "addresses";
         vm.serializeAddress(addresses, "avsTaskHook", avsTaskHook);
@@ -51,7 +51,7 @@ contract DeployAVSL2Contracts is Script {
         finalJson = vm.serializeString(finalJson, "parameters", emptyParams);
 
         // Write to output file
-        string memory outputFile = string.concat("script/local/", "output/deploy_avs_l2_output.json");
+        string memory outputFile = string.concat("script/", environment, "/output/deploy_avs_l2_output.json");
         vm.writeJson(finalJson, outputFile);
     }
 }

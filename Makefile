@@ -6,27 +6,27 @@ build:
 
 # Deploy Task Mailbox
 deploy-task-mailbox:
-	forge script script/local/deploy/DeployTaskMailbox.s.sol --rpc-url $(RPC_URL) --broadcast -vvvv
+	forge script script/local/deploy/DeployTaskMailbox.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(string)" $(ENVIRONMENT) -vvvv
 
 # Deploy AVS L1 Contracts
 deploy-avs-l1-contracts:
-	forge script script/local/deploy/DeployAVSL1Contracts.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(address)" $(AVS_ADDRESS) -vvvv
+	forge script script/local/deploy/DeployAVSL1Contracts.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(string, address)" $(ENVIRONMENT) $(AVS_ADDRESS) -vvvv
 
 # Setup AVS L1
 setup-avs-l1:
-	forge script script/local/setup/SetupAVSL1.s.sol --rpc-url $(RPC_URL) --broadcast -vvvv
+	forge script script/local/setup/SetupAVSL1.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(string)" $(ENVIRONMENT) -vvvv
 
 # Deploy AVS L2 Contracts
 deploy-avs-l2-contracts:
-	forge script script/local/deploy/DeployAVSL2Contracts.s.sol --rpc-url $(RPC_URL) --broadcast -vvvv
+	forge script script/local/deploy/DeployAVSL2Contracts.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(string)" $(ENVIRONMENT) -vvvv
 
 # Setup AVS Task Mailbox Config
 setup-avs-task-mailbox-config:
-	forge script script/local/setup/SetupAVSTaskMailboxConfig.s.sol --rpc-url $(RPC_URL) --broadcast -vvvv
+	forge script script/local/setup/SetupAVSTaskMailboxConfig.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(string)" $(ENVIRONMENT) -vvvv
 
 # Create Task
 create-task:
-	forge script script/local/run/CreateTask.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(address, bytes)" $(AVS_ADDRESS) $(PAYLOAD) -vvvv
+	forge script script/local/run/CreateTask.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(string, address, bytes)" $(ENVIRONMENT) $(AVS_ADDRESS) $(PAYLOAD) -vvvv
 
 # Helper message
 help:

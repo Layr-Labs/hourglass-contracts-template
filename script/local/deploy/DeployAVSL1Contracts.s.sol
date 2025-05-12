@@ -14,6 +14,7 @@ contract DeployAVSL1Contracts is Script {
     function setUp() public {}
 
     function run(
+        string memory environment,
         address avs
     ) public {
         // Load the private key from the environment variable
@@ -30,10 +31,10 @@ contract DeployAVSL1Contracts is Script {
         vm.stopBroadcast();
 
         // Write deployment info to output file
-        _writeOutputToJson(address(taskAVSRegistrar), avs);
+        _writeOutputToJson(environment, address(taskAVSRegistrar), avs);
     }
 
-    function _writeOutputToJson(address taskAVSRegistrar, address avs) internal {
+    function _writeOutputToJson(string memory environment, address taskAVSRegistrar, address avs) internal {
         // Add the addresses object
         string memory addresses = "addresses";
         addresses = vm.serializeAddress(addresses, "taskAVSRegistrar", taskAVSRegistrar);
@@ -54,7 +55,7 @@ contract DeployAVSL1Contracts is Script {
         finalJson = vm.serializeString(finalJson, "parameters", parameters);
 
         // Write to output file
-        string memory outputFile = string.concat("script/local/", "output/deploy_avs_l1_output.json");
+        string memory outputFile = string.concat("script/", environment, "/output/deploy_avs_l1_output.json");
         vm.writeJson(finalJson, outputFile);
     }
 }

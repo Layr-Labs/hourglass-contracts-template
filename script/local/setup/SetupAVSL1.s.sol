@@ -22,9 +22,9 @@ contract SetupAVSL1 is Script {
 
     function setUp() public {}
 
-    function run() public {
+    function run(string memory environment) public {
         // Load config and get addresses
-        address taskAVSRegistrar = _readConfigAddress("taskAVSRegistrar");
+        address taskAVSRegistrar = _readConfigAddress(environment, "taskAVSRegistrar");
         console.log("Task AVS Registrar:", taskAVSRegistrar);
 
         // Load the private key from the environment variable
@@ -56,9 +56,9 @@ contract SetupAVSL1 is Script {
         vm.stopBroadcast();
     }
 
-    function _readConfigAddress(string memory key) internal returns (address) {
+    function _readConfigAddress(string memory environment, string memory key) internal view returns (address) {
         // Load the output file
-        string memory avsL1ConfigFile = string.concat("script/local/", "output/deploy_avs_l1_output.json");
+        string memory avsL1ConfigFile = string.concat("script/", environment, "/output/deploy_avs_l1_output.json");
         string memory avsL1Config = vm.readFile(avsL1ConfigFile);
 
         // Parse the address

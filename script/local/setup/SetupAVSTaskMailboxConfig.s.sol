@@ -16,15 +16,15 @@ contract SetupAVSTaskMailboxConfig is Script {
 
     function setUp() public {}
 
-    function run() public {
+    function run(string memory environment) public {
         // Read addresses from config files
-        address taskMailbox = _readHourglassConfigAddress("taskMailbox");
+        address taskMailbox = _readHourglassConfigAddress(environment, "taskMailbox");
         console.log("Task Mailbox:", taskMailbox);
 
         // Read AVS L2 contract addresses
-        address taskHook = _readAVSL2ConfigAddress("avsTaskHook");
+        address taskHook = _readAVSL2ConfigAddress(environment, "avsTaskHook");
         console.log("AVS Task Hook:", taskHook);
-        address certificateVerifier = _readAVSL2ConfigAddress("bn254CertificateVerifier");
+        address certificateVerifier = _readAVSL2ConfigAddress(environment, "bn254CertificateVerifier");
         console.log("BN254 Certificate Verifier:", certificateVerifier);
 
         // Load the private key from the environment variable
@@ -74,18 +74,18 @@ contract SetupAVSTaskMailboxConfig is Script {
         vm.stopBroadcast();
     }
 
-    function _readHourglassConfigAddress(string memory key) internal returns (address) {
+    function _readHourglassConfigAddress(string memory environment, string memory key) internal view returns (address) {
         // Load the Hourglass config file
-        string memory hourglassConfigFile = string.concat("script/local/", "output/deploy_hourglass_core_output.json");
+        string memory hourglassConfigFile = string.concat("script/", environment, "/output/deploy_hourglass_core_output.json");
         string memory hourglassConfig = vm.readFile(hourglassConfigFile);
 
         // Parse and return the address
         return stdJson.readAddress(hourglassConfig, string.concat(".addresses.", key));
     }
 
-    function _readAVSL2ConfigAddress(string memory key) internal returns (address) {
+    function _readAVSL2ConfigAddress(string memory environment, string memory key) internal view returns (address) {
         // Load the AVS L2 config file
-        string memory avsL2ConfigFile = string.concat("script/local/", "output/deploy_avs_l2_output.json");
+        string memory avsL2ConfigFile = string.concat("script/", environment, "/output/deploy_avs_l2_output.json");
         string memory avsL2Config = vm.readFile(avsL2ConfigFile);
 
         // Parse and return the address
