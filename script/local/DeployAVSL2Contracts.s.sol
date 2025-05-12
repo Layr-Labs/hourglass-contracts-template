@@ -25,5 +25,28 @@ contract DeployAVSL2Contracts is Script {
         console.log("BN254CertificateVerifier deployed to:", address(bn254CertificateVerifier));
 
         vm.stopBroadcast();
+
+        // Add the addresses object
+        string memory addresses = "addresses";
+        vm.serializeAddress(addresses, "avsTaskHook", address(avsTaskHook));
+        addresses = vm.serializeAddress(addresses, "bn254CertificateVerifier", address(bn254CertificateVerifier));
+
+        // Add the chainInfo object 
+        string memory chainInfo = "chainInfo";
+        vm.serializeUint(chainInfo, "chainId", block.chainid);
+        chainInfo = vm.serializeUint(chainInfo, "deploymentBlock", block.number);
+
+        // Add parameters object
+        string memory emptyParams = "{}";
+
+        // Finalize the JSON
+        string memory finalJson = "final";
+        vm.serializeString(finalJson, "addresses", addresses);
+        vm.serializeString(finalJson, "chainInfo", chainInfo);
+        finalJson = vm.serializeString(finalJson, "parameters", emptyParams);
+
+        // Write to output file
+        string memory outputFile = string.concat("script/local/", "output/deploy_avs_l2_output.json");
+        vm.writeJson(finalJson, outputFile);
     }
 }
