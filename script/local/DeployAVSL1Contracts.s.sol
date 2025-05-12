@@ -28,5 +28,28 @@ contract DeployAVSL1Contracts is Script {
         console.log("TaskAVSRegistrar deployed to:", address(taskAVSRegistrar));
 
         vm.stopBroadcast();
+
+        // Add the addresses object
+        string memory addresses = "addresses";
+        addresses = vm.serializeAddress(addresses, "taskAVSRegistrar", address(taskAVSRegistrar));
+
+        // Add the chainInfo object
+        string memory chainInfo = "chainInfo";
+        vm.serializeUint(chainInfo, "chainId", block.chainid);
+        chainInfo = vm.serializeUint(chainInfo, "deploymentBlock", block.number);
+
+        // Add parameters object
+        string memory parameters = "parameters";
+        parameters = vm.serializeAddress(parameters, "avs", avs);
+
+        // Finalize the JSON
+        string memory finalJson = "final";
+        vm.serializeString(finalJson, "addresses", addresses);
+        vm.serializeString(finalJson, "chainInfo", chainInfo);
+        finalJson = vm.serializeString(finalJson, "parameters", parameters);
+
+        // Write to output file
+        string memory outputFile = string.concat("script/local/", "output/deploy_avs_l1_output.json");
+        vm.writeJson(finalJson, outputFile);
     }
 }
