@@ -16,7 +16,7 @@ This README provides step-by-step instructions for setting up and deploying the 
 Start a local Anvil node forked from Ethereum mainnet at a specific block (This includes the Eigenlayer Protocol already deployed):
 
 ```sh
-anvil --fork-url <MAINNET_RPC_URL> --fork-block-number 22396947
+anvil --fork-url <MAINNET_RPC_URL>
 ```
 
 This will run a local node at `127.0.0.1:8545`.
@@ -26,15 +26,21 @@ This will run a local node at `127.0.0.1:8545`.
 In a new terminal, deploy the TaskMailbox contract to your local fork:
 
 ```sh
-make deploy-task-mailbox RPC_URL="127.0.0.1:8545"
+make deploy-task-mailbox \
+  RPC_URL="127.0.0.1:8545" \
+  ENVIRONMENT="local"
 ```
 
 ### 3. Deploy AVS L1 Contracts
 
-Deploy the AVS L1 contracts, specifying the AVS address:
+Deploy the AVS L1 contracts, specifying the AVS address and the Allocation Manager address:
 
 ```sh
-make deploy-avs-l1-contracts AVS_ADDRESS='0x70997970C51812dc3A010C7d01b50e0d17dc79C8' RPC_URL="127.0.0.1:8545"
+make deploy-avs-l1-contracts \
+  RPC_URL="127.0.0.1:8545" \
+  ENVIRONMENT="local" \
+  AVS_ADDRESS='0x70997970C51812dc3A010C7d01b50e0d17dc79C8' \
+  ALLOCATION_MANAGER_ADDRESS='0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39'
 ```
 
 ### 4. Setup AVS L1
@@ -42,7 +48,15 @@ make deploy-avs-l1-contracts AVS_ADDRESS='0x70997970C51812dc3A010C7d01b50e0d17dc
 Register the AVS L1 contracts with the EigenLayer core protocol:
 
 ```sh
-make setup-avs-l1 TASK_AVS_REGISTRAR_ADDRESS='0xf4c5C29b14f0237131F7510A51684c8191f98E06' RPC_URL="127.0.0.1:8545"
+make setup-avs-l1 \
+  RPC_URL="127.0.0.1:8545" \
+  ENVIRONMENT="local" \
+  ALLOCATION_MANAGER_ADDRESS='0x948a420b8CC1d6BFd0B6087C2E7c344a2CD0bc39' \
+  METADATA_URI="TestAVS" \
+  AGGREGATOR_OPERATOR_SET_ID=0 \
+  AGGREGATOR_STRATEGIES='["0xaCB55C530Acdb2849e6d4f36992Cd8c9D50ED8F7","0x93c4b944D05dfe6df7645A86cd2206016c51564D"]' \
+  EXECUTOR_OPERATOR_SET_ID=1 \
+  EXECUTOR_STRATEGIES='["0xaCB55C530Acdb2849e6d4f36992Cd8c9D50ED8F7","0x93c4b944D05dfe6df7645A86cd2206016c51564D"]'
 ```
 
 ### 5. Deploy AVS L2 Contracts
@@ -50,7 +64,9 @@ make setup-avs-l1 TASK_AVS_REGISTRAR_ADDRESS='0xf4c5C29b14f0237131F7510A51684c81
 Deploy the AVS L2 contracts:
 
 ```sh
-make deploy-avs-l2-contracts RPC_URL="127.0.0.1:8545"
+make deploy-avs-l2-contracts \
+  RPC_URL="127.0.0.1:8545" \
+  ENVIRONMENT="local"
 ```
 
 ### 6. Setup AVS Task Mailbox Config
@@ -59,10 +75,11 @@ Configure the TaskMailbox with the required addresses:
 
 ```sh
 make setup-avs-task-mailbox-config \
-  TASK_MAILBOX_ADDRESS='0x7306a649B451AE08781108445425Bd4E8AcF1E00' \
-  CERTIFICATE_VERIFIER_ADDRESS='0xc91B651f770ed996a223a16dA9CCD6f7Df56C987' \
-  TASK_HOOK_ADDRESS='0x934A389CaBFB84cdB3f0260B2a4FD575b8B345A3' \
-  RPC_URL="127.0.0.1:8545"
+  RPC_URL="127.0.0.1:8545" \
+  ENVIRONMENT="local" \
+  AGGREGATOR_OPERATOR_SET_ID=0 \
+  EXECUTOR_OPERATOR_SET_ID=1 \
+  TASK_SLA=60
 ```
 
 ### 7. Create Task
@@ -71,9 +88,11 @@ Create a Task on L2 Mailbox
 
 ```sh
 make create-task \
-  TASK_MAILBOX_ADDRESS='0x7306a649B451AE08781108445425Bd4E8AcF1E00' \
+  RPC_URL="127.0.0.1:8545" \
+  ENVIRONMENT="local" \
   AVS_ADDRESS='0x70997970C51812dc3A010C7d01b50e0d17dc79C8' \
-  RPC_URL="127.0.0.1:8545"
+  EXECUTOR_OPERATOR_SET_ID=1 \
+  PAYLOAD='0x0000000000000000000000000000000000000000000000000000000000000005'
 ```
 
 ## Environment Variables

@@ -1,0 +1,10 @@
+{
+  "addresses": {
+    "taskMailbox": ""
+  },
+  "chainInfo": {
+    "chainId": 0,
+    "deploymentBlock": 0
+  },
+  "parameters": {}
+}

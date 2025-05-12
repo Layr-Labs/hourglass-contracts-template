@@ -1,34 +1,64 @@
-.PHONY: build deploy-task-mailbox deploy-avs-l1-contracts setup-avs-l1 deploy-avs-l2-contracts setup-avs-task-mailbox-config create-task
-
 # Build the project
+.PHONY: build
 build:
 	forge build
 
 # Deploy Task Mailbox
+.PHONY: deploy-task-mailbox
 deploy-task-mailbox:
-	forge script script/DeployTaskMailbox.s.sol --rpc-url $(RPC_URL) --broadcast
+	forge script script/local/deploy/DeployTaskMailbox.s.sol \
+		--rpc-url $(RPC_URL) \
+		--broadcast \
+		--sig "run(string)" $(ENVIRONMENT) \
+		-vvvv
 
 # Deploy AVS L1 Contracts
+.PHONY: deploy-avs-l1-contracts
 deploy-avs-l1-contracts:
-	forge script script/DeployAVSL1Contracts.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(address)" $(AVS_ADDRESS)
+	forge script script/local/deploy/DeployAVSL1Contracts.s.sol \
+		--rpc-url $(RPC_URL) \
+		--broadcast \
+		--sig "run(string, address, address)" $(ENVIRONMENT) $(AVS_ADDRESS) $(ALLOCATION_MANAGER_ADDRESS) \
+		-vvvv
 
 # Setup AVS L1
+.PHONY: setup-avs-l1
 setup-avs-l1:
-	forge script script/SetupAVSL1.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(address)" $(TASK_AVS_REGISTRAR_ADDRESS)
+	forge script script/local/setup/SetupAVSL1.s.sol \
+		--rpc-url $(RPC_URL) \
+		--broadcast \
+		--sig "run(string, address, string, uint32, address[], uint32, address[])" $(ENVIRONMENT) $(ALLOCATION_MANAGER_ADDRESS) $(METADATA_URI) $(AGGREGATOR_OPERATOR_SET_ID) $(AGGREGATOR_STRATEGIES) $(EXECUTOR_OPERATOR_SET_ID) $(EXECUTOR_STRATEGIES) \
+		-vvvv
 
 # Deploy AVS L2 Contracts
+.PHONY: deploy-avs-l2-contracts
 deploy-avs-l2-contracts:
-	forge script script/DeployAVSL2Contracts.s.sol --rpc-url $(RPC_URL) --broadcast
+	forge script script/local/deploy/DeployAVSL2Contracts.s.sol \
+		--rpc-url $(RPC_URL) \
+		--broadcast \
+		--sig "run(string)" $(ENVIRONMENT) \
+		-vvvv
 
 # Setup AVS Task Mailbox Config
+.PHONY: setup-avs-task-mailbox-config
 setup-avs-task-mailbox-config:
-	forge script script/SetupAVSTaskMailboxConfig.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(address, address, address)" $(TASK_MAILBOX_ADDRESS) $(CERTIFICATE_VERIFIER_ADDRESS) $(TASK_HOOK_ADDRESS)
+	forge script script/local/setup/SetupAVSTaskMailboxConfig.s.sol \
+		--rpc-url $(RPC_URL) \
+		--broadcast \
+		--sig "run(string, uint32, uint32, uint96)" $(ENVIRONMENT) $(AGGREGATOR_OPERATOR_SET_ID) $(EXECUTOR_OPERATOR_SET_ID) $(TASK_SLA) \
+		-vvvv
 
 # Create Task
+.PHONY: create-task
 create-task:
-	forge script script/CreateTask.s.sol --rpc-url $(RPC_URL) --broadcast --sig "run(address, address, uint256)" $(TASK_MAILBOX_ADDRESS) $(AVS_ADDRESS) $(VALUE)
+	forge script script/local/run/CreateTask.s.sol \
+		--rpc-url $(RPC_URL) \
+		--broadcast \
+		--sig "run(string, address, uint32, bytes)" $(ENVIRONMENT) $(AVS_ADDRESS) $(EXECUTOR_OPERATOR_SET_ID) $(PAYLOAD) \
+		-vvvv
 
 # Helper message
+.PHONY: help
 help:
 	@echo "Available commands:"
 	@echo "  make build - Build the project"
