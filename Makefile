@@ -6,7 +6,7 @@ build:
 # Deploy Task Mailbox
 .PHONY: deploy-task-mailbox
 deploy-task-mailbox:
-	forge script script/local/deploy/DeployTaskMailbox.s.sol \
+	forge script script/devnet/deploy/DeployTaskMailbox.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string)" $(ENVIRONMENT) \
@@ -15,7 +15,7 @@ deploy-task-mailbox:
 # Deploy AVS L1 Contracts
 .PHONY: deploy-avs-l1-contracts
 deploy-avs-l1-contracts:
-	forge script script/local/deploy/DeployAVSL1Contracts.s.sol \
+	forge script script/devnet/deploy/DeployAVSL1Contracts.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string, address, address)" $(ENVIRONMENT) $(AVS_ADDRESS) $(ALLOCATION_MANAGER_ADDRESS) \
@@ -24,7 +24,7 @@ deploy-avs-l1-contracts:
 # Setup AVS L1
 .PHONY: setup-avs-l1
 setup-avs-l1:
-	forge script script/local/setup/SetupAVSL1.s.sol \
+	forge script script/devnet/setup/SetupAVSL1.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string, address, string, uint32, address[], uint32, address[])" $(ENVIRONMENT) $(ALLOCATION_MANAGER_ADDRESS) $(METADATA_URI) $(AGGREGATOR_OPERATOR_SET_ID) $(AGGREGATOR_STRATEGIES) $(EXECUTOR_OPERATOR_SET_ID) $(EXECUTOR_STRATEGIES) \
@@ -33,7 +33,7 @@ setup-avs-l1:
 # Deploy AVS L2 Contracts
 .PHONY: deploy-avs-l2-contracts
 deploy-avs-l2-contracts:
-	forge script script/local/deploy/DeployAVSL2Contracts.s.sol \
+	forge script script/devnet/deploy/DeployAVSL2Contracts.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string)" $(ENVIRONMENT) \
@@ -42,7 +42,7 @@ deploy-avs-l2-contracts:
 # Setup AVS Task Mailbox Config
 .PHONY: setup-avs-task-mailbox-config
 setup-avs-task-mailbox-config:
-	forge script script/local/setup/SetupAVSTaskMailboxConfig.s.sol \
+	forge script script/devnet/setup/SetupAVSTaskMailboxConfig.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string, uint32, uint32, uint96)" $(ENVIRONMENT) $(AGGREGATOR_OPERATOR_SET_ID) $(EXECUTOR_OPERATOR_SET_ID) $(TASK_SLA) \
@@ -51,7 +51,7 @@ setup-avs-task-mailbox-config:
 # Create Task
 .PHONY: create-task
 create-task:
-	forge script script/local/run/CreateTask.s.sol \
+	forge script script/devnet/run/CreateTask.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string, address, uint32, bytes)" $(ENVIRONMENT) $(AVS_ADDRESS) $(EXECUTOR_OPERATOR_SET_ID) $(PAYLOAD) \
