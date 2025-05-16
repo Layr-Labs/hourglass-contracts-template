@@ -10,6 +10,7 @@ deploy-task-mailbox:
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string)" $(ENVIRONMENT) \
+		--slow \
 		-vvvv
 
 # Deploy AVS L1 Contracts
@@ -19,6 +20,7 @@ deploy-avs-l1-contracts:
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string, address, address)" $(ENVIRONMENT) $(AVS_ADDRESS) $(ALLOCATION_MANAGER_ADDRESS) \
+		--slow \
 		-vvvv
 
 # Setup AVS L1
@@ -28,6 +30,7 @@ setup-avs-l1:
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string, address, string, uint32, address[], uint32, address[])" $(ENVIRONMENT) $(ALLOCATION_MANAGER_ADDRESS) $(METADATA_URI) $(AGGREGATOR_OPERATOR_SET_ID) $(AGGREGATOR_STRATEGIES) $(EXECUTOR_OPERATOR_SET_ID) $(EXECUTOR_STRATEGIES) \
+		--slow \
 		-vvvv
 
 # Deploy AVS L2 Contracts
@@ -37,6 +40,7 @@ deploy-avs-l2-contracts:
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string)" $(ENVIRONMENT) \
+		--slow \
 		-vvvv
 
 # Setup AVS Task Mailbox Config
@@ -46,6 +50,7 @@ setup-avs-task-mailbox-config:
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string, uint32, uint32, uint96)" $(ENVIRONMENT) $(AGGREGATOR_OPERATOR_SET_ID) $(EXECUTOR_OPERATOR_SET_ID) $(TASK_SLA) \
+		--slow \
 		-vvvv
 
 # Create Task
@@ -55,6 +60,7 @@ create-task:
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string, address, uint32, bytes)" $(ENVIRONMENT) $(AVS_ADDRESS) $(EXECUTOR_OPERATOR_SET_ID) $(PAYLOAD) \
+		--slow \
 		-vvvv
 
 # Helper message
