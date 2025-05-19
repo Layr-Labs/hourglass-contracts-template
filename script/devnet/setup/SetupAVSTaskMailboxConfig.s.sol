@@ -14,8 +14,6 @@ import {IBN254CertificateVerifier} from "@hourglass-monorepo/src/interfaces/avs/
 contract SetupAVSTaskMailboxConfig is Script {
     using stdJson for string;
 
-    function setUp() public {}
-
     function run(
         string memory environment,
         uint32 aggregatorOperatorSetId,

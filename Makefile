@@ -1,7 +1,13 @@
 # Build the project
 .PHONY: build
 build:
+	forge clean
 	forge build
+
+# Test the project
+.PHONY: test
+test:
+	forge test -vvv
 
 # Deploy Task Mailbox
 .PHONY: deploy-task-mailbox
@@ -58,6 +64,7 @@ create-task:
 help:
 	@echo "Available commands:"
 	@echo "  make build - Build the project"
+	@echo "  make test - Test the project"
 	@echo "  make deploy-task-mailbox    - Deploy Task Mailbox"
 	@echo "  make deploy-avs-l1-contracts AVS_ADDRESS=0x... - Deploy AVS L1 Contracts"
 	@echo "  make deploy-avs-l2-contracts - Deploy AVS L2 Contracts"
