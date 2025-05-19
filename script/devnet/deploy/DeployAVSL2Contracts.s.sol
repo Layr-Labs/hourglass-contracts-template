@@ -37,8 +37,8 @@ contract DeployAVSL2Contracts is Script {
     ) internal {
         // Add the addresses object
         string memory addresses = "addresses";
-        vm.serializeAddress(addresses, "avsTaskHook", avsTaskHook);
-        addresses = vm.serializeAddress(addresses, "bn254CertificateVerifier", bn254CertificateVerifier);
+        vm.serializeAddress(addresses, "AVSTaskHook", avsTaskHook);
+        addresses = vm.serializeAddress(addresses, "CertificateVerifier", bn254CertificateVerifier);
 
         // Add the chainInfo object
         string memory chainInfo = "chainInfo";

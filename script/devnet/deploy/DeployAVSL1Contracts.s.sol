@@ -34,7 +34,7 @@ contract DeployAVSL1Contracts is Script {
     ) internal {
         // Add the addresses object
         string memory addresses = "addresses";
-        addresses = vm.serializeAddress(addresses, "taskAVSRegistrar", taskAVSRegistrar);
+        addresses = vm.serializeAddress(addresses, "AVSRegistrar", taskAVSRegistrar);
 
         // Add the chainInfo object
         string memory chainInfo = "chainInfo";
@@ -43,8 +43,8 @@ contract DeployAVSL1Contracts is Script {
 
         // Add parameters object
         string memory parameters = "parameters";
-        vm.serializeAddress(parameters, "avs", avs);
-        parameters = vm.serializeAddress(parameters, "allocationManager", allocationManager);
+        vm.serializeAddress(parameters, "AVS", avs);
+        parameters = vm.serializeAddress(parameters, "AllocationManager", allocationManager);
 
         // Finalize the JSON
         string memory finalJson = "final";
