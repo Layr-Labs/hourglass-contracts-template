@@ -30,7 +30,7 @@ contract CustomContracts is Script {
         vm.startBroadcast(context.deployerPrivateKey);
         console.log("Deployer address:", vm.addr(context.deployerPrivateKey));
 
-        //TODO: Deploy the custom contracts
+        //TODO: Implement custom contracts deployment
         // CustomContract customContract = new CustomContract();
         // console.log("CustomContract deployed to:", address(customContract));
 
@@ -39,9 +39,11 @@ contract CustomContracts is Script {
         vm.startBroadcast(context.avsPrivateKey);
         console.log("AVS address:", context.avs);
 
-        //TODO: Do any additional AVS setup
+        //TODO: Implement any additional AVS setup
 
         vm.stopBroadcast();
+
+        //TODO: Write to output file
     }
 
     function _readContext(
