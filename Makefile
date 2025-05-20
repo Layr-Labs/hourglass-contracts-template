@@ -49,6 +49,16 @@ setup-avs-task-mailbox-config:
 		--slow \
 		-vvvv
 
+# Deploy Custom Contracts
+.PHONY: deploy-custom-contracts
+deploy-custom-contracts:
+	forge script script/$(ENVIRONMENT)/custom/CustomContracts.s.sol \
+		--rpc-url $(RPC_URL) \
+		--broadcast \
+		--sig "run(string, string, address)" "$(ENVIRONMENT)" '$(CONTEXT)' "$(ALLOCATION_MANAGER_ADDRESS)" \
+		--slow \
+		-vvvv
+
 # Create Task
 .PHONY: create-task
 create-task:
