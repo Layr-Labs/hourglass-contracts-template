@@ -23,14 +23,12 @@ contract DeployAVSL1Contracts is Script {
         vm.stopBroadcast();
 
         // Write deployment info to output file
-        _writeOutputToJson(environment, address(taskAVSRegistrar), avs, allocationManager);
+        _writeOutputToJson(environment, address(taskAVSRegistrar));
     }
 
     function _writeOutputToJson(
         string memory environment,
-        address taskAVSRegistrar,
-        address avs,
-        address allocationManager
+        address taskAVSRegistrar
     ) internal {
         // Add the addresses object
         string memory addresses = "addresses";
@@ -38,19 +36,12 @@ contract DeployAVSL1Contracts is Script {
 
         // Add the chainInfo object
         string memory chainInfo = "chainInfo";
-        vm.serializeUint(chainInfo, "chainId", block.chainid);
-        chainInfo = vm.serializeUint(chainInfo, "deploymentBlock", block.number);
-
-        // Add parameters object
-        string memory parameters = "parameters";
-        vm.serializeAddress(parameters, "AVS", avs);
-        parameters = vm.serializeAddress(parameters, "AllocationManager", allocationManager);
+        chainInfo = vm.serializeUint(chainInfo, "chainId", block.chainid);
 
         // Finalize the JSON
         string memory finalJson = "final";
         vm.serializeString(finalJson, "addresses", addresses);
-        vm.serializeString(finalJson, "chainInfo", chainInfo);
-        finalJson = vm.serializeString(finalJson, "parameters", parameters);
+        finalJson = vm.serializeString(finalJson, "chainInfo", chainInfo);
 
         // Write to output file
         string memory outputFile = string.concat("script/", environment, "/output/deploy_avs_l1_output.json");

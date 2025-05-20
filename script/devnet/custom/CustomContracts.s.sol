@@ -66,7 +66,7 @@ contract CustomContracts is Script {
         context.taskMailbox = ITaskMailbox(_readHourglassConfigAddress(environment, "TaskMailbox"));
         context.taskAVSRegistrar = ITaskAVSRegistrar(_readAVSL1ConfigAddress(environment, "AVSRegistrar"));
         context.taskHook = IAVSTaskHook(_readAVSL2ConfigAddress(environment, "AVSTaskHook"));
-        context.certificateVerifier = IBN254CertificateVerifier(_readAVSL2ConfigAddress(environment, "CertificateVerifier"));
+        context.certificateVerifier = IBN254CertificateVerifier(_readAVSL2ConfigAddress(environment, "BN254CertificateVerifier"));
 
         return context;
     }
@@ -119,8 +119,7 @@ contract CustomContracts is Script {
 
             // Add the chainInfo object
             string memory chainInfo = "chainInfo";
-            vm.serializeUint(chainInfo, "chainId", block.chainid);
-            chainInfo = vm.serializeUint(chainInfo, "deploymentBlock", block.number);
+            chainInfo = vm.serializeUint(chainInfo, "chainId", block.chainid);
 
             // Finalize the JSON
             string memory finalJson = "final";

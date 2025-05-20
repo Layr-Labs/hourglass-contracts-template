@@ -38,21 +38,16 @@ contract DeployAVSL2Contracts is Script {
         // Add the addresses object
         string memory addresses = "addresses";
         vm.serializeAddress(addresses, "AVSTaskHook", avsTaskHook);
-        addresses = vm.serializeAddress(addresses, "CertificateVerifier", bn254CertificateVerifier);
+        addresses = vm.serializeAddress(addresses, "BN254CertificateVerifier", bn254CertificateVerifier);
 
         // Add the chainInfo object
         string memory chainInfo = "chainInfo";
-        vm.serializeUint(chainInfo, "chainId", block.chainid);
-        chainInfo = vm.serializeUint(chainInfo, "deploymentBlock", block.number);
-
-        // Add parameters object
-        string memory emptyParams = "{}";
+        chainInfo = vm.serializeUint(chainInfo, "chainId", block.chainid);
 
         // Finalize the JSON
         string memory finalJson = "final";
         vm.serializeString(finalJson, "addresses", addresses);
-        vm.serializeString(finalJson, "chainInfo", chainInfo);
-        finalJson = vm.serializeString(finalJson, "parameters", emptyParams);
+        finalJson = vm.serializeString(finalJson, "chainInfo", chainInfo);
 
         // Write to output file
         string memory outputFile = string.concat("script/", environment, "/output/deploy_avs_l2_output.json");

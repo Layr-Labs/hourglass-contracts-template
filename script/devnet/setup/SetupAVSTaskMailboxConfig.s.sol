@@ -27,7 +27,7 @@ contract SetupAVSTaskMailboxConfig is Script {
         // Read AVS L2 contract addresses
         address taskHook = _readAVSL2ConfigAddress(environment, "AVSTaskHook");
         console.log("AVS Task Hook:", taskHook);
-        address certificateVerifier = _readAVSL2ConfigAddress(environment, "CertificateVerifier");
+        address certificateVerifier = _readAVSL2ConfigAddress(environment, "BN254CertificateVerifier");
         console.log("BN254 Certificate Verifier:", certificateVerifier);
 
         // Load the private key from the environment variable
