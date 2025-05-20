@@ -23,6 +23,11 @@ contract CustomContracts is Script {
         IBN254CertificateVerifier certificateVerifier;
     }
 
+    struct Output {
+        string name;
+        address contractAddress;
+    }
+
     function run(string memory environment, string memory _context, address /* allocationManager */) public {
         // Read the context
         Context memory context = _readContext(environment, _context);
@@ -44,6 +49,9 @@ contract CustomContracts is Script {
         vm.stopBroadcast();
 
         //TODO: Write to output file
+        // Output[] memory outputs = new Output[](1);
+        // outputs[0] = Output({name: "CustomContract", address: address(customContract)});
+        // _writeOutputToJson(environment, outputs);
     }
 
     function _readContext(
@@ -92,5 +100,36 @@ contract CustomContracts is Script {
 
         // Parse and return the address
         return stdJson.readAddress(avsL2Config, string.concat(".addresses.", key));
+    }
+
+    function _writeOutputToJson(
+        string memory environment,
+        Output[] memory outputs
+    ) internal {
+        uint256 length = outputs.length;
+
+        if (length > 0) {
+            // Add the addresses object
+            string memory addresses = "addresses";
+        
+            for (uint256 i = 0; i < outputs.length - 1; i++) {
+                vm.serializeAddress(addresses, outputs[i].name, outputs[i].contractAddress);
+            }
+            addresses = vm.serializeAddress(addresses, outputs[length - 1].name, outputs[length - 1].contractAddress);
+
+            // Add the chainInfo object
+            string memory chainInfo = "chainInfo";
+            vm.serializeUint(chainInfo, "chainId", block.chainid);
+            chainInfo = vm.serializeUint(chainInfo, "deploymentBlock", block.number);
+
+            // Finalize the JSON
+            string memory finalJson = "final";
+            vm.serializeString(finalJson, "addresses", addresses);
+            finalJson = vm.serializeString(finalJson, "chainInfo", chainInfo);
+
+            // Write to output file
+            string memory outputFile = string.concat("script/", environment, "/output/deploy_custom_contracts_output.json");
+            vm.writeJson(finalJson, outputFile);
+        }   
     }
 }
