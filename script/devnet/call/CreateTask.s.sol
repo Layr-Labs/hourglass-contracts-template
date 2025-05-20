@@ -10,8 +10,6 @@ import {ITaskMailbox, ITaskMailboxTypes} from "@hourglass-monorepo/src/interface
 contract CreateTask is Script {
     using stdJson for string;
 
-    function setUp() public {}
-
     function run(string memory environment, address avs, uint32 executorOperatorSetId, bytes memory payload) public {
         // Read TaskMailbox address from config
         address taskMailbox = _readTaskMailboxAddress(environment);
