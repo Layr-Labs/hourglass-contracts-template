@@ -32,7 +32,7 @@ contract DeployAVSL1Contracts is Script {
     ) internal {
         // Add the addresses object
         string memory addresses = "addresses";
-        addresses = vm.serializeAddress(addresses, "AVSRegistrar", taskAVSRegistrar);
+        addresses = vm.serializeAddress(addresses, "taskAVSRegistrar", taskAVSRegistrar);
 
         // Add the chainInfo object
         string memory chainInfo = "chainInfo";

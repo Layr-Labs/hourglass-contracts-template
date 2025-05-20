@@ -29,7 +29,7 @@ contract DeployTaskMailbox is Script {
     function _writeOutputToJson(string memory environment, address taskMailbox) internal {
         // Add the addresses object
         string memory addresses = "addresses";
-        addresses = vm.serializeAddress(addresses, "TaskMailbox", taskMailbox);
+        addresses = vm.serializeAddress(addresses, "taskMailbox", taskMailbox);
 
         // Add the chainInfo object
         string memory chainInfo = "chainInfo";

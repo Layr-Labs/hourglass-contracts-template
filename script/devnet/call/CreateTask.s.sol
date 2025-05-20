@@ -49,6 +49,6 @@ contract CreateTask is Script {
         string memory hourglassConfig = vm.readFile(hourglassConfigFile);
 
         // Parse and return the TaskMailbox address
-        return stdJson.readAddress(hourglassConfig, ".addresses.TaskMailbox");
+        return stdJson.readAddress(hourglassConfig, ".addresses.taskMailbox");
     }
 }

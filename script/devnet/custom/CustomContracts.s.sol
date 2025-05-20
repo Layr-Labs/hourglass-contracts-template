@@ -63,10 +63,10 @@ contract CustomContracts is Script {
         context.avs = stdJson.readAddress(_context, ".context.avs.address");
         context.avsPrivateKey = uint256(stdJson.readBytes32(_context, ".context.avs.avs_private_key"));
         context.deployerPrivateKey = uint256(stdJson.readBytes32(_context, ".context.deployer_private_key"));
-        context.taskMailbox = ITaskMailbox(_readHourglassConfigAddress(environment, "TaskMailbox"));
-        context.taskAVSRegistrar = ITaskAVSRegistrar(_readAVSL1ConfigAddress(environment, "AVSRegistrar"));
-        context.taskHook = IAVSTaskHook(_readAVSL2ConfigAddress(environment, "AVSTaskHook"));
-        context.certificateVerifier = IBN254CertificateVerifier(_readAVSL2ConfigAddress(environment, "BN254CertificateVerifier"));
+        context.taskMailbox = ITaskMailbox(_readHourglassConfigAddress(environment, "taskMailbox"));
+        context.taskAVSRegistrar = ITaskAVSRegistrar(_readAVSL1ConfigAddress(environment, "taskAVSRegistrar"));
+        context.taskHook = IAVSTaskHook(_readAVSL2ConfigAddress(environment, "avsTaskHook"));
+        context.certificateVerifier = IBN254CertificateVerifier(_readAVSL2ConfigAddress(environment, "bn254CertificateVerifier"));
 
         return context;
     }
