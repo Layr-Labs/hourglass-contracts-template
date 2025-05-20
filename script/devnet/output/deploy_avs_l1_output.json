@@ -1,13 +1,8 @@
 {
   "addresses": {
-    "AVSRegistrar": ""
+    "taskAVSRegistrar": ""
   },
   "chainInfo": {
     "chainId": 0,
-    "deploymentBlock": 0
-  },
-  "parameters": {
-    "AllocationManager": "",
-    "AVS": ""
   }
 }
