@@ -52,7 +52,7 @@ setup-avs-task-mailbox-config:
 # Deploy Custom Contracts
 .PHONY: deploy-custom-contracts
 deploy-custom-contracts:
-	forge script script/$(ENVIRONMENT)/custom/CustomContracts.s.sol \
+	forge script $(shell pwd)/../../contracts/DeployMyContracts.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string, string, address)" "$(ENVIRONMENT)" '$(CONTEXT)' "$(ALLOCATION_MANAGER_ADDRESS)" \
