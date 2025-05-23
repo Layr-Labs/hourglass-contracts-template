@@ -19,6 +19,16 @@ deploy-task-mailbox:
 		--slow \
 		-vvvv
 
+# Deploy Task Mailbox
+.PHONY: deploy-artifact-registry
+deploy-task-mailbox:
+	forge script script/$(ENVIRONMENT)/deploy/DeployArtifactRegistry.s.sol \
+		--rpc-url $(RPC_URL) \
+		--broadcast \
+		--sig "run(string)" $(ENVIRONMENT) \
+		--slow \
+		-vvvv
+
 # Deploy AVS L1 Contracts
 .PHONY: deploy-avs-l1-contracts
 deploy-avs-l1-contracts:

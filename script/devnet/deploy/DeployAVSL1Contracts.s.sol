@@ -6,6 +6,8 @@ import {Script, console} from "forge-std/Script.sol";
 import {IAllocationManager} from "@eigenlayer-contracts/src/contracts/interfaces/IAllocationManager.sol";
 
 import {TaskAVSRegistrar} from "@project/l1-contracts/TaskAVSRegistrar.sol";
+import {AVSArtifactRegistry} from "@project/l1-contracts/AVSArtifactRegistry.sol";
+import {AVSArtifactRegistry} from "../../../../hourglass-monorepo/contracts/src/core/AVSArtifactRegistry.sol";
 
 contract DeployAVSL1Contracts is Script {
     function run(string memory environment, address avs, address allocationManager) public {
@@ -18,6 +20,8 @@ contract DeployAVSL1Contracts is Script {
         console.log("Deployer address:", deployer);
 
         TaskAVSRegistrar taskAVSRegistrar = new TaskAVSRegistrar(avs, IAllocationManager(allocationManager));
+        console.log("TaskAVSRegistrar deployed to:", address(taskAVSRegistrar));
+        AVSArtifactRegistry avsArtifactRegistry = new AVSArtifactRegistry();
         console.log("TaskAVSRegistrar deployed to:", address(taskAVSRegistrar));
 
         vm.stopBroadcast();
