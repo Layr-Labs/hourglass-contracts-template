@@ -21,7 +21,7 @@ deploy-task-mailbox:
 
 # Deploy Task Mailbox
 .PHONY: deploy-artifact-registry
-deploy-task-mailbox:
+deploy-artifact-registry:
 	forge script script/$(ENVIRONMENT)/deploy/DeployArtifactRegistry.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
