@@ -4,7 +4,6 @@ pragma solidity ^0.8.27;
 import {Script, console} from "forge-std/Script.sol";
 
 import {AVSTaskHook} from "@project/l2-contracts/AVSTaskHook.sol";
-import {BN254CertificateVerifier} from "@project/l2-contracts/BN254CertificateVerifier.sol";
 
 contract DeployAVSL2Contracts is Script {
     function run(
@@ -21,24 +20,19 @@ contract DeployAVSL2Contracts is Script {
         AVSTaskHook avsTaskHook = new AVSTaskHook();
         console.log("AVSTaskHook deployed to:", address(avsTaskHook));
 
-        BN254CertificateVerifier bn254CertificateVerifier = new BN254CertificateVerifier();
-        console.log("BN254CertificateVerifier deployed to:", address(bn254CertificateVerifier));
-
         vm.stopBroadcast();
 
         // Write deployment info to output file
-        _writeOutputToJson(environment, address(avsTaskHook), address(bn254CertificateVerifier));
+        _writeOutputToJson(environment, address(avsTaskHook));
     }
 
     function _writeOutputToJson(
         string memory environment,
-        address avsTaskHook,
-        address bn254CertificateVerifier
+        address avsTaskHook
     ) internal {
         // Add the addresses object
         string memory addresses = "addresses";
-        vm.serializeAddress(addresses, "avsTaskHook", avsTaskHook);
-        addresses = vm.serializeAddress(addresses, "bn254CertificateVerifier", bn254CertificateVerifier);
+        addresses = vm.serializeAddress(addresses, "avsTaskHook", avsTaskHook);
 
         // Add the chainInfo object
         string memory chainInfo = "chainInfo";

@@ -1,7 +1,6 @@
 {
   "addresses": {
-    "avsTaskHook": "",
-    "bn254CertificateVerifier": ""
+    "avsTaskHook": ""
   },
   "chainInfo": {
     "chainId": 0

@@ -9,7 +9,6 @@ import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
 import {ITaskMailbox, ITaskMailboxTypes} from "@hourglass-monorepo/src/interfaces/core/ITaskMailbox.sol";
 import {IAVSTaskHook} from "@hourglass-monorepo/src/interfaces/avs/l2/IAVSTaskHook.sol";
-import {IBN254CertificateVerifier} from "@hourglass-monorepo/src/interfaces/avs/l2/IBN254CertificateVerifier.sol";
 
 contract SetupAVSTaskMailboxConfig is Script {
     using stdJson for string;
@@ -18,7 +17,8 @@ contract SetupAVSTaskMailboxConfig is Script {
         string memory environment,
         uint32 aggregatorOperatorSetId,
         uint32 executorOperatorSetId,
-        uint96 taskSLA
+        uint96 taskSLA,
+        address certificateVerifier
     ) public {
         // Read addresses from config files
         address taskMailbox = _readHourglassConfigAddress(environment, "taskMailbox");
@@ -27,8 +27,6 @@ contract SetupAVSTaskMailboxConfig is Script {
         // Read AVS L2 contract addresses
         address taskHook = _readAVSL2ConfigAddress(environment, "avsTaskHook");
         console.log("AVS Task Hook:", taskHook);
-        address certificateVerifier = _readAVSL2ConfigAddress(environment, "bn254CertificateVerifier");
-        console.log("BN254 Certificate Verifier:", certificateVerifier);
 
         // Load the private key from the environment variable
         uint256 avsPrivateKey = vm.envUint("PRIVATE_KEY_AVS");
