@@ -25,7 +25,7 @@ deploy-avs-l1-contracts:
 	forge script script/$(ENVIRONMENT)/deploy/DeployAVSL1Contracts.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
-		--sig "run(string, address, address)" $(ENVIRONMENT) $(AVS_ADDRESS) $(ALLOCATION_MANAGER_ADDRESS) \
+		--sig "run(string, address, address, address)" $(ENVIRONMENT) $(AVS_ADDRESS) $(ALLOCATION_MANAGER_ADDRESS) $(KEY_REGISTRAR_ADDRESS) \
 		--slow \
 		-vvvv
 
@@ -45,7 +45,7 @@ setup-avs-task-mailbox-config:
 	forge script script/$(ENVIRONMENT)/setup/SetupAVSTaskMailboxConfig.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
-		--sig "run(string, uint32, uint32, uint96)" $(ENVIRONMENT) $(AGGREGATOR_OPERATOR_SET_ID) $(EXECUTOR_OPERATOR_SET_ID) $(TASK_SLA) \
+		--sig "run(string, uint32, uint32, uint96, address)" $(ENVIRONMENT) $(AGGREGATOR_OPERATOR_SET_ID) $(EXECUTOR_OPERATOR_SET_ID) $(TASK_SLA) $(CERTIFICATE_VERIFIER_ADDRESS) \
 		--slow \
 		-vvvv
 
@@ -56,7 +56,7 @@ deploy-custom-contracts:
 		--lib-paths . \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
-		--sig "run(string, string, address)" "$(ENVIRONMENT)" '$(CONTEXT)' "$(ALLOCATION_MANAGER_ADDRESS)" \
+		--sig "run(string, string)" "$(ENVIRONMENT)" '$(CONTEXT)'\
 		--slow \
 		-vvvv
 
