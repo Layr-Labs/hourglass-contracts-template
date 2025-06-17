@@ -56,7 +56,7 @@ deploy-custom-contracts:
 		--lib-paths . \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
-		--sig "run(string, string, address)" "$(ENVIRONMENT)" '$(CONTEXT)' "$(ALLOCATION_MANAGER_ADDRESS)" \
+		--sig "run(string, string)" "$(ENVIRONMENT)" '$(CONTEXT)'\
 		--slow \
 		-vvvv
 
