@@ -25,7 +25,7 @@ deploy-avs-l1-contracts:
 	forge script script/$(ENVIRONMENT)/deploy/DeployAVSL1Contracts.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
-		--sig "run(string, address, address, address)" $(ENVIRONMENT) $(AVS_ADDRESS) $(ALLOCATION_MANAGER_ADDRESS) $(KEY_REGISTRAR_ADDRESS) \
+		--sig "run(string, address, address, address, uint32, uint32)" $(ENVIRONMENT) $(AVS_ADDRESS) $(ALLOCATION_MANAGER_ADDRESS) $(KEY_REGISTRAR_ADDRESS) $(AGGREGATOR_OPERATOR_SET_ID) $(EXECUTOR_OPERATOR_SET_ID) \
 		--slow \
 		-vvvv
 
@@ -45,7 +45,7 @@ setup-avs-task-mailbox-config:
 	forge script script/$(ENVIRONMENT)/setup/SetupAVSTaskMailboxConfig.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
-		--sig "run(string, uint32, uint32, uint96, address)" $(ENVIRONMENT) $(AGGREGATOR_OPERATOR_SET_ID) $(EXECUTOR_OPERATOR_SET_ID) $(TASK_SLA) $(CERTIFICATE_VERIFIER_ADDRESS) \
+		--sig "run(string, uint32, uint96, address)" $(ENVIRONMENT) $(EXECUTOR_OPERATOR_SET_ID) $(TASK_SLA) $(CERTIFICATE_VERIFIER_ADDRESS) \
 		--slow \
 		-vvvv
 

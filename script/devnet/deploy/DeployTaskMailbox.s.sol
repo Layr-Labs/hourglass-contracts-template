@@ -33,7 +33,7 @@ contract DeployTaskMailbox is Script {
 
         // Add the chainInfo object
         string memory chainInfo = "chainInfo";
-        chainInfo =vm.serializeUint(chainInfo, "chainId", block.chainid);
+        chainInfo = vm.serializeUint(chainInfo, "chainId", block.chainid);
 
         // Finalize the JSON
         string memory finalJson = "final";

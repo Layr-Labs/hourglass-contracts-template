@@ -15,7 +15,6 @@ contract SetupAVSTaskMailboxConfig is Script {
 
     function run(
         string memory environment,
-        uint32 aggregatorOperatorSetId,
         uint32 executorOperatorSetId,
         uint96 taskSLA,
         address certificateVerifier
@@ -35,22 +34,7 @@ contract SetupAVSTaskMailboxConfig is Script {
         vm.startBroadcast(avsPrivateKey);
         console.log("AVS address:", avs);
 
-        // 1. Set the AVS config
-        uint32[] memory executorOperatorSetIds = new uint32[](1);
-        executorOperatorSetIds[0] = executorOperatorSetId;
-        ITaskMailboxTypes.AvsConfig memory avsConfig = ITaskMailboxTypes.AvsConfig({
-            aggregatorOperatorSetId: aggregatorOperatorSetId,
-            executorOperatorSetIds: executorOperatorSetIds
-        });
-        ITaskMailbox(taskMailbox).setAvsConfig(avs, avsConfig);
-        ITaskMailboxTypes.AvsConfig memory avsConfigStored = ITaskMailbox(taskMailbox).getAvsConfig(avs);
-        console.log(
-            "AVS config set:",
-            avsConfigStored.aggregatorOperatorSetId,
-            avsConfigStored.executorOperatorSetIds[0]
-        );
-
-        // 2. Set the Executor Operator Set Task Config
+        // Set the Executor Operator Set Task Config
         ITaskMailboxTypes.ExecutorOperatorSetTaskConfig memory executorOperatorSetTaskConfig = ITaskMailboxTypes
             .ExecutorOperatorSetTaskConfig({
             certificateVerifier: certificateVerifier,

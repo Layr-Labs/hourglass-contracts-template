@@ -26,10 +26,7 @@ contract DeployAVSL2Contracts is Script {
         _writeOutputToJson(environment, address(avsTaskHook));
     }
 
-    function _writeOutputToJson(
-        string memory environment,
-        address avsTaskHook
-    ) internal {
+    function _writeOutputToJson(string memory environment, address avsTaskHook) internal {
         // Add the addresses object
         string memory addresses = "addresses";
         addresses = vm.serializeAddress(addresses, "avsTaskHook", avsTaskHook);
