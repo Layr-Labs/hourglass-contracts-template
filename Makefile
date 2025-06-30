@@ -15,7 +15,7 @@ deploy-task-mailbox:
 	forge script script/$(ENVIRONMENT)/deploy/DeployTaskMailbox.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
-		--sig "run(string)" $(ENVIRONMENT) \
+		--sig "run(string, address, address)" $(ENVIRONMENT) $(BN254_CERTIFICATE_VERIFIER) $(ECDSA_CERTIFICATE_VERIFIER) \
 		--slow \
 		-vvvv
 
@@ -45,7 +45,7 @@ setup-avs-task-mailbox-config:
 	forge script script/$(ENVIRONMENT)/setup/SetupAVSTaskMailboxConfig.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
-		--sig "run(string, uint32, uint96, address)" $(ENVIRONMENT) $(EXECUTOR_OPERATOR_SET_ID) $(TASK_SLA) $(CERTIFICATE_VERIFIER_ADDRESS) \
+		--sig "run(string, uint32, uint96, uint8)" $(ENVIRONMENT) $(EXECUTOR_OPERATOR_SET_ID) $(TASK_SLA) $(CURVE_TYPE) \
 		--slow \
 		-vvvv
 
