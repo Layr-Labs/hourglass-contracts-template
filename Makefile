@@ -49,10 +49,21 @@ setup-avs-task-mailbox-config:
 		--slow \
 		-vvvv
 
-# Deploy Custom Contracts
-.PHONY: deploy-custom-contracts
-deploy-custom-contracts:
-	forge script $(shell pwd)/../../contracts/script/DeployMyContracts.s.sol \
+# Deploy Custom L1 Contracts
+.PHONY: deploy-custom-contracts-l1
+deploy-custom-contracts-l1:
+	forge script $(shell pwd)/../../contracts/script/DeployMyL1Contracts.s.sol \
+		--lib-paths . \
+		--rpc-url $(RPC_URL) \
+		--broadcast \
+		--sig "run(string, string)" "$(ENVIRONMENT)" '$(CONTEXT)'\
+		--slow \
+		-vvvv
+
+# Deploy Custom L2 Contracts
+.PHONY: deploy-custom-contracts-l2
+deploy-custom-contracts-l2:
+	forge script $(shell pwd)/../../contracts/script/DeployMyL2Contracts.s.sol \
 		--lib-paths . \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
