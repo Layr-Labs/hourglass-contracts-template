@@ -4,6 +4,7 @@ pragma solidity ^0.8.27;
 import {Script, console} from "forge-std/Script.sol";
 import {stdJson} from "forge-std/StdJson.sol";
 
+import {IKeyRegistrarTypes} from "@eigenlayer-contracts/src/contracts/interfaces/IKeyRegistrar.sol";
 import {OperatorSet, OperatorSetLib} from "@eigenlayer-contracts/src/contracts/libraries/OperatorSetLib.sol";
 import {IERC20} from "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
@@ -13,12 +14,7 @@ import {IAVSTaskHook} from "@hourglass-monorepo/src/interfaces/avs/l2/IAVSTaskHo
 contract SetupAVSTaskMailboxConfig is Script {
     using stdJson for string;
 
-    function run(
-        string memory environment,
-        uint32 executorOperatorSetId,
-        uint96 taskSLA,
-        address certificateVerifier
-    ) public {
+    function run(string memory environment, uint32 executorOperatorSetId, uint96 taskSLA, uint8 curveType) public {
         // Read addresses from config files
         address taskMailbox = _readHourglassConfigAddress(environment, "taskMailbox");
         console.log("Task Mailbox:", taskMailbox);
@@ -37,7 +33,7 @@ contract SetupAVSTaskMailboxConfig is Script {
         // Set the Executor Operator Set Task Config
         ITaskMailboxTypes.ExecutorOperatorSetTaskConfig memory executorOperatorSetTaskConfig = ITaskMailboxTypes
             .ExecutorOperatorSetTaskConfig({
-            certificateVerifier: certificateVerifier,
+            curveType: IKeyRegistrarTypes.CurveType(curveType),
             taskHook: IAVSTaskHook(taskHook),
             feeToken: IERC20(address(0)),
             feeCollector: address(0),
@@ -51,8 +47,8 @@ contract SetupAVSTaskMailboxConfig is Script {
         ITaskMailboxTypes.ExecutorOperatorSetTaskConfig memory executorOperatorSetTaskConfigStored =
             ITaskMailbox(taskMailbox).getExecutorOperatorSetTaskConfig(OperatorSet(avs, executorOperatorSetId));
         console.log(
-            "Executor Operator Set Task Config set:",
-            executorOperatorSetTaskConfigStored.certificateVerifier,
+            "Executor Operator Set Task Config set with curve type:",
+            uint8(executorOperatorSetTaskConfigStored.curveType),
             address(executorOperatorSetTaskConfigStored.taskHook)
         );
 
