@@ -13,7 +13,7 @@ contract DeployAVSL2Contracts is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
         address deployer = vm.addr(deployerPrivateKey);
 
-        // Deploy the AVSTaskHook and CertificateVerifier contracts
+        // Deploy the AVSTaskHook contract
         vm.startBroadcast(deployerPrivateKey);
         console.log("Deployer address:", deployer);
 
