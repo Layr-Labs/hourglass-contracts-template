@@ -29,7 +29,7 @@ contract DeployTaskMailbox is Script {
         console.log("ProxyAdmin deployed to:", address(proxyAdmin));
 
         // Deploy implementation
-        TaskMailbox taskMailboxImpl = new TaskMailbox(bn254CertificateVerifier, ecdsaCertificateVerifier, "1.0.0");
+        TaskMailbox taskMailboxImpl = new TaskMailbox(bn254CertificateVerifier, ecdsaCertificateVerifier, "0.0.1");
         console.log("TaskMailbox implementation deployed to:", address(taskMailboxImpl));
 
         // Deploy proxy with initialization
