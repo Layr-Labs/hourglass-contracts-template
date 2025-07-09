@@ -2,6 +2,9 @@
 pragma solidity ^0.8.27;
 
 import {Script, console} from "forge-std/Script.sol";
+import {ProxyAdmin} from "@openzeppelin/contracts/proxy/transparent/ProxyAdmin.sol";
+import {TransparentUpgradeableProxy} from "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
+import {ITransparentUpgradeableProxy} from "@openzeppelin/contracts/proxy/transparent/TransparentUpgradeableProxy.sol";
 
 import {IAllocationManager} from "@eigenlayer-contracts/src/contracts/interfaces/IAllocationManager.sol";
 import {IKeyRegistrar} from "@eigenlayer-contracts/src/contracts/interfaces/IKeyRegistrar.sol";
@@ -23,7 +26,7 @@ contract DeployAVSL1Contracts is Script {
         uint256 deployerPrivateKey = vm.envUint("PRIVATE_KEY_DEPLOYER");
         address deployer = vm.addr(deployerPrivateKey);
 
-        // Deploy the TaskAVSRegistrar middleware contract
+        // Deploy the TaskAVSRegistrar middleware contract with proxy pattern
         vm.startBroadcast(deployerPrivateKey);
         console.log("Deployer address:", deployer);
 
@@ -35,21 +38,39 @@ contract DeployAVSL1Contracts is Script {
             executorOperatorSetIds: executorOperatorSetIds
         });
 
-        TaskAVSRegistrar taskAVSRegistrar = new TaskAVSRegistrar(
-            avs, IAllocationManager(allocationManager), IKeyRegistrar(keyRegistrar), avs, initialConfig
+        // Deploy ProxyAdmin
+        ProxyAdmin proxyAdmin = new ProxyAdmin();
+        console.log("ProxyAdmin deployed to:", address(proxyAdmin));
+
+        // Deploy implementation
+        TaskAVSRegistrar taskAVSRegistrarImpl = new TaskAVSRegistrar(
+            avs, IAllocationManager(allocationManager), IKeyRegistrar(keyRegistrar)
         );
-        console.log("TaskAVSRegistrar deployed to:", address(taskAVSRegistrar));
+        console.log("TaskAVSRegistrar implementation deployed to:", address(taskAVSRegistrarImpl));
+
+        // Deploy proxy with initialization
+        TransparentUpgradeableProxy proxy = new TransparentUpgradeableProxy(
+            address(taskAVSRegistrarImpl),
+            address(proxyAdmin),
+            abi.encodeWithSelector(TaskAVSRegistrar.initialize.selector, avs, initialConfig)
+        );
+        console.log("TaskAVSRegistrar proxy deployed to:", address(proxy));
+
+        // Transfer ProxyAdmin ownership to avs (or a multisig in production)
+        proxyAdmin.transferOwnership(avs);
 
         vm.stopBroadcast();
 
         // Write deployment info to output file
-        _writeOutputToJson(environment, address(taskAVSRegistrar));
+        _writeOutputToJson(environment, address(proxy), address(taskAVSRegistrarImpl), address(proxyAdmin));
     }
 
-    function _writeOutputToJson(string memory environment, address taskAVSRegistrar) internal {
+    function _writeOutputToJson(string memory environment, address taskAVSRegistrarProxy, address taskAVSRegistrarImpl, address proxyAdmin) internal {
         // Add the addresses object
         string memory addresses = "addresses";
-        addresses = vm.serializeAddress(addresses, "taskAVSRegistrar", taskAVSRegistrar);
+        vm.serializeAddress(addresses, "taskAVSRegistrar", taskAVSRegistrarProxy);
+        vm.serializeAddress(addresses, "taskAVSRegistrarImpl", taskAVSRegistrarImpl);
+        addresses = vm.serializeAddress(addresses, "l1ProxyAdmin", proxyAdmin);
 
         // Add the chainInfo object
         string memory chainInfo = "chainInfo";
