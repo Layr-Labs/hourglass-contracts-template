@@ -5,7 +5,6 @@ import {Script, console} from "forge-std/Script.sol";
 
 import {IKeyRegistrarTypes} from "@eigenlayer-contracts/src/contracts/interfaces/IKeyRegistrar.sol";
 
-import {ITaskMailboxTypes} from "@hourglass-monorepo/src/interfaces/core/ITaskMailbox.sol";
 import {TaskMailbox} from "@hourglass-monorepo/src/core/TaskMailbox.sol";
 
 contract DeployTaskMailbox is Script {
@@ -22,18 +21,7 @@ contract DeployTaskMailbox is Script {
         vm.startBroadcast(deployerPrivateKey);
         console.log("Deployer address:", deployer);
 
-        ITaskMailboxTypes.CertificateVerifierConfig[] memory certificateVerifiers =
-            new ITaskMailboxTypes.CertificateVerifierConfig[](2);
-        certificateVerifiers[0] = ITaskMailboxTypes.CertificateVerifierConfig({
-            curveType: IKeyRegistrarTypes.CurveType.BN254,
-            verifier: bn254CertificateVerifier
-        });
-        certificateVerifiers[1] = ITaskMailboxTypes.CertificateVerifierConfig({
-            curveType: IKeyRegistrarTypes.CurveType.ECDSA,
-            verifier: ecdsaCertificateVerifier
-        });
-
-        TaskMailbox taskMailbox = new TaskMailbox(deployer, certificateVerifiers);
+        TaskMailbox taskMailbox = new TaskMailbox(bn254CertificateVerifier, ecdsaCertificateVerifier, "0.0.1");
         console.log("TaskMailbox deployed to:", address(taskMailbox));
 
         vm.stopBroadcast();
