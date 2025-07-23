@@ -12,7 +12,7 @@ test:
 # Deploy Task Mailbox
 .PHONY: deploy-task-mailbox
 deploy-task-mailbox:
-	forge script script/$(ENVIRONMENT)/deploy/DeployTaskMailbox.s.sol \
+	forge script script/deploy/DeployTaskMailbox.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string, address, address)" $(ENVIRONMENT) $(BN254_CERTIFICATE_VERIFIER) $(ECDSA_CERTIFICATE_VERIFIER) \
@@ -22,7 +22,7 @@ deploy-task-mailbox:
 # Deploy AVS L1 Contracts
 .PHONY: deploy-avs-l1-contracts
 deploy-avs-l1-contracts:
-	forge script script/$(ENVIRONMENT)/deploy/DeployAVSL1Contracts.s.sol \
+	forge script script/deploy/DeployAVSL1Contracts.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string, address, address, address, uint32, uint32)" $(ENVIRONMENT) $(AVS_ADDRESS) $(ALLOCATION_MANAGER_ADDRESS) $(KEY_REGISTRAR_ADDRESS) $(AGGREGATOR_OPERATOR_SET_ID) $(EXECUTOR_OPERATOR_SET_ID) \
@@ -32,7 +32,7 @@ deploy-avs-l1-contracts:
 # Deploy AVS L2 Contracts
 .PHONY: deploy-avs-l2-contracts
 deploy-avs-l2-contracts:
-	forge script script/$(ENVIRONMENT)/deploy/DeployAVSL2Contracts.s.sol \
+	forge script script/deploy/DeployAVSL2Contracts.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string)" $(ENVIRONMENT) \
@@ -42,7 +42,7 @@ deploy-avs-l2-contracts:
 # Setup AVS Task Mailbox Config
 .PHONY: setup-avs-task-mailbox-config
 setup-avs-task-mailbox-config:
-	forge script script/$(ENVIRONMENT)/setup/SetupAVSTaskMailboxConfig.s.sol \
+	forge script script/setup/SetupAVSTaskMailboxConfig.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string, uint32, uint96, uint8)" $(ENVIRONMENT) $(EXECUTOR_OPERATOR_SET_ID) $(TASK_SLA) $(CURVE_TYPE) \
@@ -74,7 +74,7 @@ deploy-custom-contracts-l2:
 # Create Task
 .PHONY: create-task
 create-task:
-	forge script script/$(ENVIRONMENT)/call/CreateTask.s.sol \
+	forge script script/call/CreateTask.s.sol \
 		--rpc-url $(RPC_URL) \
 		--broadcast \
 		--sig "run(string, address, uint32, bytes)" $(ENVIRONMENT) $(AVS_ADDRESS) $(EXECUTOR_OPERATOR_SET_ID) $(PAYLOAD) \
